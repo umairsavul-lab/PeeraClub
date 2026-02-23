@@ -9,137 +9,178 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
+    /* ── CSS VARIABLES: DARK (default) ── */
+    :root{
+      --bg:#000;
+      --card:rgba(13,13,13,0.97);
+      --card-b:rgba(255,255,255,0.1);
+      --t1:#fff;
+      --t2:rgba(255,255,255,0.75);
+      --t3:rgba(255,255,255,0.45);
+      --t4:rgba(255,255,255,0.28);
+      --t5:rgba(255,255,255,0.18);
+      --sep:rgba(255,255,255,0.07);
+      --sep2:rgba(255,255,255,0.04);
+      --row:rgba(255,255,255,0.015);
+      --input-bg:rgba(255,255,255,0.05);
+      --input-b:rgba(255,255,255,0.1);
+      --panel-bg:rgba(10,10,10,0.98);
+      --scroll:#2a2a2a;
+      --track:#0a0a0a;
+      --ghost-bg:rgba(255,255,255,.07);
+      --ghost-b:rgba(255,255,255,.14);
+      --ghost-c:rgba(255,255,255,.8);
+      --choice-bg:rgba(255,255,255,0.04);
+      --choice-b:rgba(255,255,255,0.08);
+      --choice-c:rgba(255,255,255,0.65);
+      --modal-overlay:rgba(0,0,0,.9);
+      --fab-label-bg:rgba(13,13,13,.97);
+      --fab-badge-b:#000;
+    }
+    /* ── CSS VARIABLES: LIGHT ── */
+    body.light{
+      --bg:#edf0f5;
+      --card:rgba(255,255,255,0.96);
+      --card-b:rgba(0,0,0,0.1);
+      --t1:#111;
+      --t2:rgba(0,0,0,0.75);
+      --t3:rgba(0,0,0,0.5);
+      --t4:rgba(0,0,0,0.38);
+      --t5:rgba(0,0,0,0.22);
+      --sep:rgba(0,0,0,0.08);
+      --sep2:rgba(0,0,0,0.05);
+      --row:rgba(0,0,0,0.025);
+      --input-bg:rgba(0,0,0,0.04);
+      --input-b:rgba(0,0,0,0.15);
+      --panel-bg:rgba(255,255,255,0.99);
+      --scroll:#bbb;
+      --track:#ddd;
+      --ghost-bg:rgba(0,0,0,.06);
+      --ghost-b:rgba(0,0,0,.14);
+      --ghost-c:rgba(0,0,0,.75);
+      --choice-bg:rgba(0,0,0,0.04);
+      --choice-b:rgba(0,0,0,0.1);
+      --choice-c:rgba(0,0,0,0.6);
+      --modal-overlay:rgba(0,0,0,.6);
+      --fab-label-bg:rgba(255,255,255,.97);
+      --fab-badge-b:#edf0f5;
+    }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html,body,#root{min-height:100%}
     body{
-      background:#000;
+      background:var(--bg);
       font-family:'Inter','Segoe UI',system-ui,sans-serif;
-      color:#fff;
+      color:var(--t1);
       position:relative;
+      transition:background .3s, color .3s;
     }
+    /* ── DARK geometric background ── */
     body::before{
       content:'';
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
+      position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:
-        /* bold diagonal slash lines — like a jersey/sportswear pattern */
-        repeating-linear-gradient(
-          -55deg,
-          transparent,
-          transparent 28px,
-          rgba(251,191,36,0.055) 28px,
-          rgba(251,191,36,0.055) 30px
-        ),
-        /* counter-diagonal for X diamond mesh */
-        repeating-linear-gradient(
-          55deg,
-          transparent,
-          transparent 28px,
-          rgba(251,191,36,0.03) 28px,
-          rgba(251,191,36,0.03) 30px
-        ),
-        /* subtle vertical rhythm */
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 79px,
-          rgba(251,191,36,0.02) 79px,
-          rgba(251,191,36,0.02) 80px
-        );
+        repeating-linear-gradient(-55deg,transparent,transparent 28px,rgba(251,191,36,0.055) 28px,rgba(251,191,36,0.055) 30px),
+        repeating-linear-gradient(55deg,transparent,transparent 28px,rgba(251,191,36,0.03) 28px,rgba(251,191,36,0.03) 30px),
+        repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(251,191,36,0.02) 79px,rgba(251,191,36,0.02) 80px);
+      opacity:1;transition:opacity .3s;
+    }
+    body.light::before{
+      background-image:
+        repeating-linear-gradient(-55deg,transparent,transparent 28px,rgba(100,100,180,0.07) 28px,rgba(100,100,180,0.07) 30px),
+        repeating-linear-gradient(55deg,transparent,transparent 28px,rgba(100,100,180,0.04) 28px,rgba(100,100,180,0.04) 30px),
+        repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(100,100,180,0.03) 79px,rgba(100,100,180,0.03) 80px);
     }
     body::after{
       content:'';
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
-      /* radial spotlight from top-center — like stadium lights */
+      position:fixed;inset:0;z-index:0;pointer-events:none;
       background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(251,191,36,0.07) 0%, transparent 70%),
-        /* subtle corner vignettes */
-        radial-gradient(ellipse 60% 60% at 0% 0%,   rgba(59,130,246,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 60% at 100% 0%,  rgba(239,68,68,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 40% at 50% 110%, rgba(0,0,0,0.8) 0%, transparent 70%);
+        radial-gradient(ellipse 80% 50% at 50% -10%,rgba(251,191,36,0.07) 0%,transparent 70%),
+        radial-gradient(ellipse 60% 60% at 0% 0%,rgba(59,130,246,0.04) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 0%,rgba(239,68,68,0.04) 0%,transparent 60%),
+        radial-gradient(ellipse 80% 40% at 50% 110%,rgba(0,0,0,0.8) 0%,transparent 70%);
+      transition:background .3s;
+    }
+    body.light::after{
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%,rgba(251,191,36,0.12) 0%,transparent 70%),
+        radial-gradient(ellipse 60% 60% at 0% 0%,rgba(59,130,246,0.06) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 0%,rgba(239,68,68,0.06) 0%,transparent 60%),
+        radial-gradient(ellipse 80% 40% at 50% 110%,rgba(255,255,255,0.5) 0%,transparent 70%);
     }
     #root{position:relative;z-index:1}
+
     ::-webkit-scrollbar{width:5px}
-    ::-webkit-scrollbar-track{background:#0a0a0a}
-    ::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+    ::-webkit-scrollbar-track{background:var(--track)}
+    ::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:3px}
 
-    .card{background:rgba(13,13,13,0.97);border:1px solid rgba(255,255,255,0.1);border-radius:14px}
+    .card{background:var(--card);border:1px solid var(--card-b);border-radius:14px;transition:background .3s,border-color .3s}
 
-    .tab-btn{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:13px;font-weight:600;padding:10px 18px;border-bottom:3px solid transparent;letter-spacing:.5px;font-family:inherit;transition:.15s}
-    .tab-btn.on{color:#fff;border-bottom-color:#fbbf24}
-    .tab-btn:hover:not(.on){color:rgba(255,255,255,.7)}
+    .tab-btn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:13px;font-weight:600;padding:10px 18px;border-bottom:3px solid transparent;letter-spacing:.5px;font-family:inherit;transition:.15s}
+    .tab-btn.on{color:var(--t1);border-bottom-color:#fbbf24}
+    .tab-btn:hover:not(.on){color:var(--t2)}
 
-    .choice{border-radius:10px;cursor:pointer;transition:all .15s;border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.65);font-family:inherit}
-    .choice:hover{background:rgba(255,255,255,0.09);color:#fff;border-color:rgba(255,255,255,0.2)}
+    .choice{border-radius:10px;cursor:pointer;transition:all .15s;border:1.5px solid var(--choice-b);background:var(--choice-bg);color:var(--choice-c);font-family:inherit}
+    .choice:hover{background:var(--ghost-bg);color:var(--t1);border-color:var(--ghost-b)}
     .choice.sel-a{background:rgba(59,130,246,0.2)!important;border-color:#3b82f6!important;color:#93c5fd!important}
     .choice.sel-b{background:rgba(239,68,68,0.2)!important;border-color:#ef4444!important;color:#fca5a5!important}
-    .choice.sel-red{background:rgba(239,68,68,0.18)!important;border-color:#ef4444!important;color:#fff!important}
-    .choice.sel-gold{background:rgba(251,191,36,0.18)!important;border-color:#fbbf24!important;color:#fef08a!important}
-    .choice.sel-none{background:rgba(255,255,255,0.07)!important;border-color:rgba(255,255,255,0.25)!important;color:rgba(255,255,255,0.6)!important}
+    .choice.sel-red{background:rgba(239,68,68,0.18)!important;border-color:#ef4444!important;color:#c00!important}
+    .choice.sel-gold{background:rgba(251,191,36,0.18)!important;border-color:#fbbf24!important;color:#92400e!important}
+    .choice.sel-none{background:var(--ghost-bg)!important;border-color:var(--t4)!important;color:var(--t3)!important}
+    body:not(.light) .choice.sel-red{color:#fff!important}
+    body:not(.light) .choice.sel-gold{color:#fef08a!important}
 
     .rec-btn{width:100%;padding:15px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;background:linear-gradient(135deg,#92400e,#fbbf24);border:none;color:#000;border-radius:12px;cursor:pointer;transition:.15s;box-shadow:0 6px 28px rgba(251,191,36,0.3)}
     .rec-btn:hover:not(:disabled){filter:brightness(1.1);box-shadow:0 8px 34px rgba(251,191,36,0.45)}
     .rec-btn:disabled{opacity:.35;cursor:not-allowed}
 
-    .ghost-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
-    .ghost-btn:hover{background:rgba(255,255,255,.13)}
-    .danger-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
+    .ghost-btn{background:var(--ghost-bg);border:1px solid var(--ghost-b);color:var(--ghost-c);border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
+    .ghost-btn:hover{filter:brightness(.95)}
+    .danger-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#c00;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
+    body:not(.light) .danger-btn{color:#f87171}
     .danger-btn:hover{background:rgba(239,68,68,.2)}
-    .print-btn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#fde68a;border-radius:10px;cursor:pointer;font-weight:600;font-size:12px;padding:8px 14px;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+    .print-btn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#92400e;border-radius:10px;cursor:pointer;font-weight:600;font-size:12px;padding:8px 14px;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+    body:not(.light) .print-btn{color:#fde68a}
     .print-btn:hover{background:rgba(251,191,36,.2)}
 
-    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+    .modal-bg{position:fixed;inset:0;background:var(--modal-overlay);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+
+    /* theme toggle */
+    .theme-btn{
+      display:flex;align-items:center;gap:7px;
+      background:var(--ghost-bg);border:1px solid var(--card-b);
+      color:var(--t2);border-radius:20px;padding:6px 14px 6px 10px;
+      cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;
+      transition:all .2s;letter-spacing:.5px;
+    }
+    .theme-btn:hover{background:var(--ghost-b);color:var(--t1)}
+    .theme-btn .toggle-track{
+      width:30px;height:16px;border-radius:8px;position:relative;
+      background:rgba(251,191,36,.2);border:1px solid rgba(251,191,36,.4);
+      transition:background .2s;flex-shrink:0;
+    }
+    .theme-btn.active .toggle-track{background:rgba(251,191,36,.7)}
+    .theme-btn .toggle-knob{
+      position:absolute;top:2px;left:2px;
+      width:10px;height:10px;border-radius:50%;
+      background:#fbbf24;transition:transform .2s;
+    }
+    .theme-btn.active .toggle-knob{transform:translateX(14px)}
 
     /* ── FLOATING RECORD PANEL ── */
     .fab-wrap{position:fixed;bottom:28px;right:28px;z-index:900;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-
-    .fab-btn{
-      width:64px;height:64px;border-radius:50%;
-      background:linear-gradient(135deg,#92400e,#fbbf24);
-      border:none;cursor:pointer;
-      box-shadow:0 8px 32px rgba(251,191,36,.45);
-      display:flex;align-items:center;justify-content:center;
-      font-size:26px;transition:all .25s;
-      position:relative;
-    }
+    .fab-btn{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#92400e,#fbbf24);border:none;cursor:pointer;box-shadow:0 8px 32px rgba(251,191,36,.45);display:flex;align-items:center;justify-content:center;font-size:26px;transition:all .25s;position:relative;}
     .fab-btn:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(251,191,36,.6)}
-    .fab-btn .fab-label{
-      position:absolute;right:74px;top:50%;transform:translateY(-50%);
-      background:rgba(13,13,13,.97);border:1px solid rgba(251,191,36,.35);
-      color:#fbbf24;font-size:12px;font-weight:700;letter-spacing:1px;
-      padding:5px 12px;border-radius:8px;white-space:nowrap;
-      opacity:0;pointer-events:none;transition:opacity .2s;
-    }
+    .fab-btn .fab-label{position:absolute;right:74px;top:50%;transform:translateY(-50%);background:var(--fab-label-bg);border:1px solid rgba(251,191,36,.35);color:#fbbf24;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 12px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;}
     .fab-btn:hover .fab-label{opacity:1}
-    .fab-btn .fab-badge{
-      position:absolute;top:-4px;right:-4px;
-      background:#ef4444;color:#fff;font-size:10px;font-weight:800;
-      border-radius:50%;width:20px;height:20px;
-      display:flex;align-items:center;justify-content:center;
-      border:2px solid #000;
-    }
+    .fab-btn .fab-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border:2px solid var(--fab-badge-b);}
 
-    .float-panel{
-      width:360px;
-      background:rgba(10,10,10,0.98);
-      border:1px solid rgba(251,191,36,.3);
-      border-radius:18px;
-      box-shadow:0 24px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(251,191,36,.08), 0 0 60px rgba(251,191,36,.08);
-      overflow:hidden;
-      transform-origin:bottom right;
-      transition:transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
-    }
+    .float-panel{width:360px;background:var(--panel-bg);border:1px solid rgba(251,191,36,.3);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 60px rgba(251,191,36,.06);overflow:hidden;transform-origin:bottom right;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s,background .3s;}
     .float-panel.hidden{transform:scale(0.85) translateY(10px);opacity:0;pointer-events:none}
     .float-panel.visible{transform:scale(1) translateY(0);opacity:1}
-
     .float-panel-body{padding:18px 18px 20px;max-height:calc(100vh - 140px);overflow-y:auto}
     .float-panel-body::-webkit-scrollbar{width:4px}
-    .float-panel-body::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
+    .float-panel-body::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:2px}
 
     @keyframes glow-pulse{0%,100%{box-shadow:0 0 20px rgba(251,191,36,.3)}50%{box-shadow:0 0 44px rgba(251,191,36,.65)}}
     .seized-banner{background:linear-gradient(135deg,rgba(146,64,14,.4),rgba(251,191,36,.08));border:1px solid rgba(251,191,36,.5);border-radius:12px;padding:14px 16px;text-align:center;animation:glow-pulse 2s infinite}
@@ -238,14 +279,22 @@ function App(){
   const [loading,setLoading]         = useState(true);
   const [tab,setTab]                 = useState("log");
   const [panelOpen,setPanelOpen]     = useState(false);
-  const [form,setForm]               = useState({winner:"A",winType:"simple",mom:null,kunni:null});
+  const [theme,setTheme]             = useState(()=>localStorage.getItem("mr-theme")||"dark");
+  const [form,setForm]               = useState({winner:"A",winType:"simple",mom:null,kunni:null,location:""});
   const [toast,setToast]             = useState(null);
   const [confirmGame,setConfirmGame] = useState(false);
   const [confirmReset,setConfirmReset]=useState(false);
   const panelRef                     = useRef(null);
 
+  // Apply theme class to body
   useEffect(()=>{
-    (async()=>{
+    document.body.classList.toggle("light", theme==="light");
+    localStorage.setItem("mr-theme", theme);
+  },[theme]);
+
+  function toggleTheme(){ setTheme(t=>t==="dark"?"light":"dark"); }
+
+  useEffect(()=>{
       try{const r=await store.get(SK);if(r?.value)setGames(JSON.parse(r.value));}catch(_){}
       setLoading(false);
     })();
@@ -287,10 +336,15 @@ function App(){
 
   async function doRecord(){
     setConfirmGame(false);
+    const now=new Date();
     const g={
       id:Date.now(),set:curSet,gameInSet:curSG.length+1,
       gameNumber:games.length+1,winner:form.winner,winType:form.winType,
-      mom:form.mom||null,kunni:form.kunni||null,ts:new Date().toISOString()
+      mom:form.mom||null,kunni:form.kunni||null,
+      location:form.location.trim()||null,
+      ts:now.toISOString(),
+      date:now.toLocaleDateString("en-PK",{day:"2-digit",month:"short",year:"numeric"}),
+      time:now.toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})
     };
     const updated=[...games,g];
     setGames(updated);await saveGames(updated);
@@ -343,9 +397,9 @@ function App(){
     const setRows=sets.map(s=>`<tr><td><b>Set ${s.n}</b></td><td class="blue" style="font-weight:800;font-size:15px">${s.aScore}</td><td class="red" style="font-weight:800;font-size:15px">${s.bScore}</td><td>${s.played}/20</td><td>${s.seized&&!s.done?"SEIZED":s.done?"Completed":"In Progress"}</td><td style="font-weight:700">${s.winner?(s.winner==="A"?"Team A":"Team B"):"-"}</td></tr>`).join("");
     const gameRows=[...games].reverse().map(g=>{
       const wt=getWT(g.winType);
-      return `<tr><td>${g.gameNumber}</td><td>S${g.set}</td><td class="${g.winner==="A"?"blue":"red"}" style="font-weight:700">${g.winner==="A"?"Team A":"Team B"}</td><td>${wt?.icon} ${wt?.label}</td><td style="font-weight:800">${wt?.pts}</td><td class="gold" style="font-weight:700">${g.mom?`⭐ ${g.mom}`:"—"}</td><td class="red">${g.kunni?`💩 ${g.kunni}`:"—"}</td><td>${new Date(g.ts).toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}</td></tr>`;
+      return `<tr><td>${g.gameNumber}</td><td>S${g.set}</td><td class="${g.winner==="A"?"blue":"red"}" style="font-weight:700">${g.winner==="A"?"Team A":"Team B"}</td><td>${wt?.icon} ${wt?.label}</td><td style="font-weight:800">${wt?.pts}</td><td class="gold" style="font-weight:700">${g.mom?`⭐ ${g.mom}`:"—"}</td><td class="red">${g.kunni?`💩 ${g.kunni}`:"—"}</td><td>${g.date||new Date(g.ts).toLocaleDateString("en-PK",{day:"2-digit",month:"short",year:"numeric"})}</td><td>${g.time||new Date(g.ts).toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}</td><td>${g.location?`📍 ${g.location}`:"—"}</td></tr>`;
     }).join("");
-    printHTML("Game Log",`<h1>Maidaan-e-Rung — Game Log</h1><p class="sub">Peera Club · Quarterly Tournament · ${games.length} games recorded</p><h2>Set Summary</h2><table><thead><tr><th>Set</th><th>Team A Pts</th><th>Team B Pts</th><th>Games</th><th>Status</th><th>Winner</th></tr></thead><tbody>${setRows}</tbody></table><h2>Full Game Log</h2><table><thead><tr><th>#</th><th>Set</th><th>Winner</th><th>Win Type</th><th>Pts</th><th>MoM</th><th>Kunni</th><th>Time</th></tr></thead><tbody>${gameRows}</tbody></table>`);
+    printHTML("Game Log",`<h1>Maidaan-e-Rung — Game Log</h1><p class="sub">Peera Club · Quarterly Tournament · ${games.length} games recorded</p><h2>Set Summary</h2><table><thead><tr><th>Set</th><th>Team A Pts</th><th>Team B Pts</th><th>Games</th><th>Status</th><th>Winner</th></tr></thead><tbody>${setRows}</tbody></table><h2>Full Game Log</h2><table><thead><tr><th>#</th><th>Set</th><th>Winner</th><th>Win Type</th><th>Pts</th><th>MoM</th><th>Kunni</th><th>Date</th><th>Time</th><th>Location</th></tr></thead><tbody>${gameRows}</tbody></table>`);
   }
 
   function printAnalytics(){
@@ -364,24 +418,73 @@ function App(){
 
   const gap=Math.abs(curInfo.aScore-curInfo.bScore);
   const leadingNow=curInfo.aScore>=curInfo.bScore?"A":"B";
+  const isDark=theme==="dark";
+
+  // Inline-style theme tokens
+  const th={
+    t1:  isDark?"#fff":"#111",
+    t2:  isDark?"rgba(255,255,255,.75)":"rgba(0,0,0,.75)",
+    t3:  isDark?"rgba(255,255,255,.45)":"rgba(0,0,0,.5)",
+    t4:  isDark?"rgba(255,255,255,.28)":"rgba(0,0,0,.38)",
+    t5:  isDark?"rgba(255,255,255,.18)":"rgba(0,0,0,.22)",
+    card:isDark?"rgba(13,13,13,.97)":"rgba(255,255,255,.96)",
+    cardB:isDark?"rgba(255,255,255,.1)":"rgba(0,0,0,.1)",
+    sep: isDark?"rgba(255,255,255,.07)":"rgba(0,0,0,.08)",
+    sep2:isDark?"rgba(255,255,255,.04)":"rgba(0,0,0,.05)",
+    row: isDark?"rgba(255,255,255,.015)":"rgba(0,0,0,.025)",
+    hdr: isDark?"linear-gradient(180deg,rgba(20,10,0,.97),rgba(0,0,0,.95))":"linear-gradient(180deg,rgba(20,10,0,.97),rgba(10,5,0,.94))",
+    logHead:isDark?"rgba(251,191,36,.07)":"rgba(251,191,36,.1)",
+    logHeadTxt:isDark?"rgba(255,255,255,.45)":"rgba(0,0,0,.5)",
+    setActive:isDark?"rgba(251,191,36,.06)":"rgba(251,191,36,.12)",
+    setInactive:isDark?"rgba(13,13,13,.97)":"rgba(255,255,255,.96)",
+    panelHead:isDark?"linear-gradient(135deg,rgba(146,64,14,.5),rgba(251,191,36,.1))":"linear-gradient(135deg,rgba(146,64,14,.6),rgba(251,191,36,.2))",
+    vsArea:isDark?"rgba(255,255,255,.02)":"rgba(0,0,0,.02)",
+    vsB:  isDark?"rgba(255,255,255,.06)":"rgba(0,0,0,.07)",
+    modal:isDark?"#0d0d0d":"#fff",
+    confirmRow:isDark?"rgba(255,255,255,.04)":"rgba(0,0,0,.04)",
+    confirmLbl:isDark?"rgba(255,255,255,.35)":"rgba(0,0,0,.4)",
+    statusB:isDark?"rgba(255,255,255,.06)":"rgba(0,0,0,.08)",
+    statusBg:isDark?"rgba(255,255,255,.02)":"rgba(0,0,0,.02)",
+    seized:isDark?"rgba(251,191,36,.07)":"rgba(251,191,36,.12)",
+    refBg:isDark?"rgba(255,255,255,.03)":"rgba(0,0,0,.03)",
+    refB: isDark?"rgba(255,255,255,.05)":"rgba(0,0,0,.07)",
+    refTxt:isDark?"rgba(255,255,255,.45)":"rgba(0,0,0,.5)",
+    playerCard:isDark?"rgba(255,255,255,.04)":"rgba(0,0,0,.04)",
+    tabBorder:isDark?"rgba(255,255,255,.08)":"rgba(0,0,0,.1)",
+    inputBg:isDark?"rgba(255,255,255,.05)":"rgba(0,0,0,.04)",
+    inputB:isDark?"rgba(255,255,255,.1)":"rgba(0,0,0,.15)",
+    acard:isDark?"rgba(13,13,13,.97)":"#fff",
+    acardB:isDark?"rgba(255,255,255,.09)":"rgba(0,0,0,.09)",
+    badge:isDark?"rgba(255,255,255,.18)":"rgba(0,0,0,.15)",
+    badgeTxt:isDark?"rgba(255,255,255,.3)":"rgba(0,0,0,.35)",
+  };
 
   return (
     <div style={{minHeight:"100vh",paddingBottom:100}}>
 
       {/* TOAST */}
       {toast&&(
-        <div style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",zIndex:99999,background:toast.type==="ok"?"#14532d":toast.type==="err"?"#450a0a":toast.type==="seized"?"#1c1000":"#1e3a5f",border:`1px solid ${toast.type==="ok"?"#22c55e":toast.type==="err"?"#ef4444":toast.type==="seized"?"#fbbf24":"#3b82f6"}`,color:"#fff",padding:"13px 22px",borderRadius:10,fontSize:14,fontWeight:600,boxShadow:"0 8px 32px rgba(0,0,0,.8)",maxWidth:380,textAlign:"center",lineHeight:1.5}}>
+        <div style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",zIndex:99999,background:toast.type==="ok"?"#14532d":toast.type==="err"?"#450a0a":toast.type==="seized"?"#1c1000":"#1e3a5f",border:`1px solid ${toast.type==="ok"?"#22c55e":toast.type==="err"?"#ef4444":toast.type==="seized"?"#fbbf24":"#3b82f6"}`,color:th.t1,padding:"13px 22px",borderRadius:10,fontSize:14,fontWeight:600,boxShadow:"0 8px 32px rgba(0,0,0,.8)",maxWidth:380,textAlign:"center",lineHeight:1.5}}>
           {toast.msg}
         </div>
       )}
 
       {/* HEADER */}
-      <div style={{background:"linear-gradient(180deg,rgba(20,10,0,0.97) 0%,rgba(0,0,0,0.95) 100%)",borderBottom:"1px solid rgba(251,191,36,0.2)",padding:"36px 24px 28px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+      <div style={{background:th.hdr,borderBottom:`1px solid rgba(251,191,36,0.2)`,padding:"36px 24px 28px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:0,left:0,width:160,height:160,background:"radial-gradient(circle at 0 0,rgba(251,191,36,0.13),transparent 70%)"}}/>
         <div style={{position:"absolute",top:0,right:0,width:160,height:160,background:"radial-gradient(circle at 100% 0,rgba(251,191,36,0.13),transparent 70%)"}}/>
         <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:"linear-gradient(90deg,transparent,#fbbf24,transparent)"}}/>
+      {/* Theme toggle */}
+        <div style={{position:"absolute",top:16,right:20,zIndex:10}}>
+          <button className={`theme-btn${theme==="light"?" active":""}`} onClick={toggleTheme}>
+            <span style={{fontSize:14}}>{theme==="dark"?"🌙":"☀️"}</span>
+            <div className="toggle-track"><div className="toggle-knob"/></div>
+            <span>{theme==="dark"?"Dark":"Light"}</span>
+          </button>
+        </div>
+
         <p style={{fontSize:10,letterSpacing:8,color:"rgba(251,191,36,0.55)",fontWeight:800,textTransform:"uppercase",marginBottom:12}}>♠  Peera Club · Quarterly Tournament  ♠</p>
-        <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(48px,8vw,84px)",letterSpacing:8,lineHeight:1,color:"#fff",textShadow:"0 0 80px rgba(251,191,36,0.4),0 0 20px rgba(251,191,36,0.15)"}}>Maidaan-e-Rung</h1>
+        <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(48px,8vw,84px)",letterSpacing:8,lineHeight:1,color:th.t1,textShadow:"0 0 80px rgba(251,191,36,0.4),0 0 20px rgba(251,191,36,0.15)"}}>Maidaan-e-Rung</h1>
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:14,marginTop:10}}>
           <div style={{height:1,width:70,background:"linear-gradient(90deg,transparent,rgba(251,191,36,0.4))"}}/>
           <span style={{fontSize:14,color:"rgba(255,255,255,0.25)",letterSpacing:6,fontStyle:"italic"}}>میدانِ رنگ</span>
@@ -403,10 +506,10 @@ function App(){
         <div className="card" style={{overflow:"hidden",marginBottom:12}}>
           <div style={{display:"grid",gridTemplateColumns:"1fr 100px 1fr"}}>
             <ScorePanel team={TEAM_A} score={curInfo.aScore} sets={sets} isKing={kings==="A"} isGhulam={kings==="B"}/>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",borderLeft:"1px solid rgba(255,255,255,.06)",borderRight:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.02)",padding:"20px 0",gap:8}}>
-              <div style={{fontSize:9,fontWeight:800,letterSpacing:4,color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>Set {curSet}</div>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",borderLeft:`1px solid ${th.vsB}`,borderRight:`1px solid ${th.vsB}`,background:th.vsArea,padding:"20px 0",gap:8}}>
+              <div style={{fontSize:9,fontWeight:800,letterSpacing:4,color:th.t4,textTransform:"uppercase"}}>Set {curSet}</div>
               <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,color:"#fbbf24",letterSpacing:3,lineHeight:1}}>VS</div>
-              <div style={{fontSize:11,fontWeight:600,color:"rgba(255,255,255,.3)"}}>{curSG.length}<span style={{opacity:.5}}>/20</span></div>
+              <div style={{fontSize:11,fontWeight:600,color:th.t4}}>{curSG.length}<span style={{opacity:.5}}>/20</span></div>
               <div style={{width:40,height:3,background:"rgba(255,255,255,.08)",borderRadius:2,overflow:"hidden"}}>
                 <div style={{width:`${(curSG.length/GPSet)*100}%`,height:"100%",background:"#fbbf24",transition:"width .4s"}}/>
               </div>
@@ -414,17 +517,17 @@ function App(){
             <ScorePanel team={TEAM_B} score={curInfo.bScore} sets={sets} isKing={kings==="B"} isGhulam={kings==="A"}/>
           </div>
           {!siezed&&curSG.length>0&&(
-            <div style={{borderTop:"1px solid rgba(255,255,255,.06)",padding:"9px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",background:"rgba(255,255,255,.02)"}}>
-              <span style={{fontSize:11,color:"rgba(255,255,255,.3)",fontWeight:500}}><span style={{color:"rgba(251,191,36,.5)"}}>●</span> {remaining} games left · max {remaining*MAX_PTS} pts available</span>
-              <span style={{fontSize:11,color:"rgba(255,255,255,.3)",fontWeight:500}}>Lead: <span style={{color:leadingNow==="A"?TEAM_A.light:TEAM_B.light,fontWeight:700}}>{gap} pts — {teamOf(leadingNow).name}</span></span>
+            <div style={{borderTop:`1px solid ${th.statusB}`,padding:"9px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",background:th.statusBg}}>
+              <span style={{fontSize:11,color:th.t4,fontWeight:500}}><span style={{color:"rgba(251,191,36,.5)"}}>●</span> {remaining} games left · max {remaining*MAX_PTS} pts available</span>
+              <span style={{fontSize:11,color:th.t4,fontWeight:500}}>Lead: <span style={{color:leadingNow==="A"?TEAM_A.light:TEAM_B.light,fontWeight:700}}>{gap} pts — {teamOf(leadingNow).name}</span></span>
             </div>
           )}
           {siezed&&(
-            <div style={{borderTop:"1px solid rgba(251,191,36,.3)",padding:"14px 20px",background:"rgba(251,191,36,.07)",display:"flex",alignItems:"center",justifyContent:"center",gap:12}}>
+            <div style={{borderTop:"1px solid rgba(251,191,36,.3)",padding:"14px 20px",background:th.seized,display:"flex",alignItems:"center",justifyContent:"center",gap:12}}>
               <span style={{fontSize:22}}>🏆</span>
               <div style={{textAlign:"center"}}>
                 <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:3,color:"#fbbf24"}}>SET {curSet} SEIZED — {teamOf(sWinner).name.toUpperCase()} WINS</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,.4)",marginTop:2}}>Other team cannot catch up even with max points remaining</div>
+                <div style={{fontSize:11,color:th.t4,marginTop:2}}>Other team cannot catch up even with max points remaining</div>
               </div>
               <span style={{fontSize:22}}>🏆</span>
             </div>
@@ -434,9 +537,9 @@ function App(){
         {/* SET TRACKER */}
         <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:18}}>
           {sets.map(s=>(
-            <div key={s.n} className="card" style={{padding:"12px 14px",borderColor:s.n===curSet?"rgba(251,191,36,.4)":"rgba(255,255,255,.07)",background:s.n===curSet?"rgba(251,191,36,.06)":"rgba(13,13,13,.97)"}}>
+            <div key={s.n} className="card" style={{padding:"12px 14px",borderColor:s.n===curSet?"rgba(251,191,36,.4)":th.cardB,background:s.n===curSet?th.setActive:th.setInactive}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                <span style={{fontSize:9,fontWeight:800,letterSpacing:3,color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>Set {s.n}</span>
+                <span style={{fontSize:9,fontWeight:800,letterSpacing:3,color:th.t4,textTransform:"uppercase"}}>Set {s.n}</span>
                 {s.seized&&!s.done&&<span style={{fontSize:9,fontWeight:700,background:"rgba(251,191,36,.2)",color:"#fbbf24",borderRadius:4,padding:"1px 6px",letterSpacing:1}}>SEIZED</span>}
                 {s.done&&<span style={{fontSize:9,fontWeight:700,background:"rgba(34,197,94,.2)",color:"#86efac",borderRadius:4,padding:"1px 6px",letterSpacing:1}}>DONE</span>}
               </div>
@@ -446,7 +549,7 @@ function App(){
                 <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,color:"#f87171",letterSpacing:2}}>{s.bScore}</span>
               </div>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6}}>
-                <span style={{fontSize:10,color:"rgba(255,255,255,.25)"}}>{s.played}/20</span>
+                <span style={{fontSize:10,color:th.t5}}>{s.played}/20</span>
                 {s.winner&&<span style={{fontSize:10,fontWeight:700,color:s.winner==="A"?"#93c5fd":"#fca5a5"}}>{s.winner==="A"?"🔵 A":"🔴 B"} Wins</span>}
               </div>
             </div>
@@ -454,7 +557,7 @@ function App(){
         </div>
 
         {/* TABS */}
-        <div style={{borderBottom:"1px solid rgba(255,255,255,.08)",marginBottom:0}}>
+        <div style={{borderBottom:`1px solid ${th.tabBorder}`,marginBottom:0}}>
           {[["log","📜  Game Log"],["analytics","📊  Analytics"]].map(([id,lbl])=>(
             <button key={id} className={`tab-btn${tab===id?" on":""}`} onClick={()=>setTab(id)}>{lbl}</button>
           ))}
@@ -473,9 +576,9 @@ function App(){
               <div className="card" style={{overflow:"hidden"}}>
                 <table style={{width:"100%",borderCollapse:"collapse"}}>
                   <thead>
-                    <tr style={{background:"rgba(251,191,36,.07)"}}>
-                      {["#","Set","Winner","Win Type","Pts","⭐ MoM","💩 Kunni","Time"].map(h=>(
-                        <th key={h} style={{padding:"11px 13px",textAlign:"left",fontSize:10,fontWeight:700,color:"rgba(255,255,255,.45)",textTransform:"uppercase",letterSpacing:1.5,borderBottom:"1px solid rgba(255,255,255,.07)"}}>{h}</th>
+                    <tr style={{background:th.logHead}}>
+                      {["#","Set","Winner","Win Type","Pts","⭐ MoM","💩 Kunni","Date","Time","📍 Location"].map(h=>(
+                        <th key={h} style={{padding:"11px 13px",textAlign:"left",fontSize:10,fontWeight:700,color:th.logHeadTxt,textTransform:"uppercase",letterSpacing:1.5,borderBottom:`1px solid ${th.sep}`}}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -483,9 +586,9 @@ function App(){
                     {[...games].reverse().map((g,i)=>{
                       const wt=getWT(g.winType),isA=g.winner==="A";
                       return (
-                        <tr key={g.id} style={{borderBottom:"1px solid rgba(255,255,255,.04)",background:i%2?"rgba(255,255,255,.015)":"transparent"}}>
-                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:600,color:"rgba(255,255,255,.35)"}}>{g.gameNumber}</td>
-                          <td style={{padding:"10px 13px",fontSize:11,color:"rgba(255,255,255,.3)"}}>S{g.set}</td>
+                        <tr key={g.id} style={{borderBottom:`1px solid ${th.sep2}`,background:i%2?th.row:"transparent"}}>
+                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:600,color:th.t4}}>{g.gameNumber}</td>
+                          <td style={{padding:"10px 13px",fontSize:11,color:th.t4}}>S{g.set}</td>
                           <td style={{padding:"10px 13px"}}><span style={{fontSize:13,fontWeight:700,color:isA?"#93c5fd":"#fca5a5"}}>{isA?"🔵 Team A":"🔴 Team B"}</span></td>
                           <td style={{padding:"10px 13px"}}>
                             <span style={{background:wt?.value==="gandageeri"?"rgba(239,68,68,.2)":wt?.value==="gooun"?"rgba(251,191,36,.12)":wt?.value==="court"?"rgba(34,197,94,.1)":"rgba(255,255,255,.06)",color:wt?.value==="gandageeri"?"#fca5a5":wt?.value==="gooun"?"#fde047":wt?.value==="court"?"#86efac":"rgba(255,255,255,.6)",borderRadius:5,padding:"2px 9px",fontSize:11,fontWeight:600}}>
@@ -494,8 +597,10 @@ function App(){
                           </td>
                           <td style={{padding:"10px 13px",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,color:"#fbbf24",letterSpacing:1}}>{wt?.pts}</td>
                           <td style={{padding:"10px 13px",fontSize:12,fontWeight:700,color:g.mom?"#fde047":"rgba(255,255,255,.2)",fontStyle:g.mom?"normal":"italic"}}>{g.mom?`⭐ ${g.mom}`:"—"}</td>
-                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:700,color:g.kunni?"#f87171":"rgba(255,255,255,.2)",fontStyle:g.kunni?"normal":"italic"}}>{g.kunni?`💩 ${g.kunni}`:"—"}</td>
-                          <td style={{padding:"10px 13px",fontSize:11,color:"rgba(255,255,255,.2)"}}>{new Date(g.ts).toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}</td>
+                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:700,color:g.kunni?"#f87171":th.t5,fontStyle:g.kunni?"normal":"italic"}}>{g.kunni?`💩 ${g.kunni}`:"—"}</td>
+                          <td style={{padding:"10px 13px",fontSize:11,color:th.t4,fontWeight:500,whiteSpace:"nowrap"}}>{g.date||new Date(g.ts).toLocaleDateString("en-PK",{day:"2-digit",month:"short",year:"numeric"})}</td>
+                          <td style={{padding:"10px 13px",fontSize:11,color:th.t5,whiteSpace:"nowrap"}}>{g.time||new Date(g.ts).toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}</td>
+                          <td style={{padding:"10px 13px",fontSize:11,fontWeight:600,color:g.location?"#a78bfa":th.t5,fontStyle:g.location?"normal":"italic",whiteSpace:"nowrap"}}>{g.location?`📍 ${g.location}`:"—"}</td>
                         </tr>
                       );
                     })}
@@ -519,38 +624,38 @@ function App(){
               <>
                 {/* MoM + Kunni leaderboards */}
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-                  <ACard title="⭐ Man of the Match" accent="#fde047">
-                    {!stats.momList.length?<NoData msg="No MoM awarded yet"/>:stats.momList.map(([n,c],i)=><StatBar key={n} name={n} count={c} max={stats.momList[0][1]} color="#fde047" rank={i+1}/>)}
+                  <ACard title="⭐ Man of the Match" accent="#fde047" th={th}>
+                    {!stats.momList.length?<NoData msg="No MoM awarded yet" th={th}/>:stats.momList.map(([n,c],i)=><StatBar key={n} name={n} count={c} max={stats.momList[0][1]} color="#fde047" rank={i+1} th={th}/>)}
                   </ACard>
-                  <ACard title="💩 Kunni Hall of Shame" accent="#f87171">
-                    {!stats.kunniList.length?<NoData msg="No Kunni awarded yet"/>:stats.kunniList.map(([n,c],i)=><StatBar key={n} name={n} count={c} max={stats.kunniList[0][1]} color="#f87171" rank={i+1}/>)}
+                  <ACard title="💩 Kunni Hall of Shame" accent="#f87171" th={th}>
+                    {!stats.kunniList.length?<NoData msg="No Kunni awarded yet" th={th}/>:stats.kunniList.map(([n,c],i)=><StatBar key={n} name={n} count={c} max={stats.kunniList[0][1]} color="#f87171" rank={i+1} th={th}/>)}
                   </ACard>
                 </div>
 
                 {/* Per-player full stats */}
-                <ACard title="👤  Player Breakdown" accent="#a78bfa">
+                <ACard title="👤  Player Breakdown" accent="#a78bfa" th={th}>
                   <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:10}}>
                     {[...TEAM_A.players,...TEAM_B.players].map(p=>{
                       const isA=TEAM_A.players.includes(p),tm=isA?TEAM_A:TEAM_B;
                       const ps=stats.playerStats[p]||{wins:0,mom:0,kunni:0};
                       return (
-                        <div key={p} style={{background:"rgba(255,255,255,.04)",border:`1px solid ${tm.color}25`,borderRadius:12,padding:"14px 16px",display:"flex",alignItems:"center",gap:14}}>
+                        <div key={p} style={{background:th.playerCard,border:`1px solid ${tm.color}25`,borderRadius:12,padding:"14px 16px",display:"flex",alignItems:"center",gap:14}}>
                           <div style={{fontSize:32,flexShrink:0}}>{isA?"🔵":"🔴"}</div>
                           <div style={{flex:1}}>
-                            <div style={{fontSize:15,fontWeight:700,color:"#fff"}}>{p}</div>
-                            <div style={{fontSize:11,color:"rgba(255,255,255,.35)",marginBottom:10}}>{tm.name}</div>
+                            <div style={{fontSize:15,fontWeight:700,color:th.t1}}>{p}</div>
+                            <div style={{fontSize:11,color:th.t4,marginBottom:10}}>{tm.name}</div>
                             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,textAlign:"center"}}>
-                              <div style={{background:"rgba(255,255,255,.05)",borderRadius:8,padding:"6px 4px"}}>
+                              <div style={{background:th.badge,borderRadius:8,padding:"6px 4px"}}>
                                 <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:tm.light,lineHeight:1}}>{ps.wins}</div>
-                                <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>Wins</div>
+                                <div style={{fontSize:9,color:th.badgeTxt,marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>Wins</div>
                               </div>
-                              <div style={{background:"rgba(251,191,36,.08)",borderRadius:8,padding:"6px 4px"}}>
-                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:"#fde047",lineHeight:1}}>{ps.mom}</div>
-                                <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>MoM</div>
+                              <div style={{background:"rgba(251,191,36,.1)",borderRadius:8,padding:"6px 4px"}}>
+                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:"#ca8a04",lineHeight:1}}>{ps.mom}</div>
+                                <div style={{fontSize:9,color:th.badgeTxt,marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>MoM</div>
                               </div>
-                              <div style={{background:"rgba(239,68,68,.08)",borderRadius:8,padding:"6px 4px"}}>
-                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:"#f87171",lineHeight:1}}>{ps.kunni}</div>
-                                <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>Kunni</div>
+                              <div style={{background:"rgba(239,68,68,.1)",borderRadius:8,padding:"6px 4px"}}>
+                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:"#dc2626",lineHeight:1}}>{ps.kunni}</div>
+                                <div style={{fontSize:9,color:th.badgeTxt,marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>Kunni</div>
                               </div>
                             </div>
                           </div>
@@ -561,17 +666,17 @@ function App(){
                 </ACard>
 
                 {/* Win type */}
-                <ACard title="♠  Win Type Breakdown" accent="#fbbf24">
+                <ACard title="♠  Win Type Breakdown" accent="#fbbf24" th={th}>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
                     {WIN_TYPES.map(wt=>{
                       const c=stats.wtC[wt.value]||0,pct=games.length?Math.round((c/games.length)*100):0;
                       return (
                         <div key={wt.value}>
                           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-                            <span style={{fontSize:13,fontWeight:600,color:"#fff"}}>{wt.icon} {wt.label}</span>
-                            <span style={{fontSize:12,color:"rgba(255,255,255,.4)"}}>{c} <span style={{color:"#fbbf24",fontFamily:"'Bebas Neue',sans-serif",fontSize:17}}>{pct}%</span></span>
+                            <span style={{fontSize:13,fontWeight:600,color:th.t1}}>{wt.icon} {wt.label}</span>
+                            <span style={{fontSize:12,color:th.t4}}>{c} <span style={{color:"#ca8a04",fontFamily:"'Bebas Neue',sans-serif",fontSize:17}}>{pct}%</span></span>
                           </div>
-                          <div style={{height:5,background:"rgba(255,255,255,.07)",borderRadius:3,overflow:"hidden"}}>
+                          <div style={{height:5,background:th.sep,borderRadius:3,overflow:"hidden"}}>
                             <div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#92400e,#fbbf24)",borderRadius:3,transition:"width .5s"}}/>
                           </div>
                         </div>
@@ -590,7 +695,7 @@ function App(){
         {/* Floating Panel */}
         <div className={`float-panel ${panelOpen?"visible":"hidden"}`}>
           {/* Panel Header */}
-          <div style={{background:"linear-gradient(135deg,rgba(146,64,14,.5),rgba(251,191,36,.1))",borderBottom:"1px solid rgba(251,191,36,.2)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div style={{background:th.panelHead,borderBottom:"1px solid rgba(251,191,36,.2)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <div>
               <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:19,letterSpacing:4,color:"#fbbf24",lineHeight:1}}>RECORD GAME</div>
               <div style={{fontSize:11,color:"rgba(255,255,255,.4)",marginTop:2}}>Game #{games.length+1} · Set {curSet} · {curSG.length}/20</div>
@@ -664,6 +769,19 @@ function App(){
               <button className={`choice${form.kunni===null?" sel-none":""}`} onClick={()=>setForm(f=>({...f,kunni:null}))} style={{padding:"9px 6px",textAlign:"center",fontSize:11,color:"rgba(255,255,255,.4)"}}>None</button>
             </div>
 
+            {/* Location */}
+            <FieldLabel>📍 Location <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:9}}>optional</span></FieldLabel>
+            <input
+              type="text"
+              value={form.location}
+              onChange={e=>setForm(f=>({...f,location:e.target.value}))}
+              placeholder="e.g. Peera Club, Peshawar"
+              maxLength={60}
+              style={{width:"100%",background:"rgba(255,255,255,.05)",border:"1.5px solid rgba(255,255,255,.1)",borderRadius:10,padding:"10px 14px",color:th.t1,fontSize:13,fontFamily:"inherit",outline:"none",marginBottom:18,transition:"border-color .15s"}}
+              onFocus={e=>e.target.style.borderColor="rgba(167,139,250,.6)"}
+              onBlur={e=>e.target.style.borderColor="rgba(255,255,255,.1)"}
+            />
+
             <button className="rec-btn" onClick={tryRecord} disabled={siezed&&curSG.length>=GPSet} style={{fontSize:19,letterSpacing:4,padding:"14px"}}>
               RECORD GAME
             </button>
@@ -703,10 +821,13 @@ function App(){
                   ["Win Type", `${wt?.icon}  ${wt?.label}  (+${wt?.pts}pt)`],
                   ["⭐ MoM",   form.mom||"—  (not awarded)"],
                   ["💩 Kunni", form.kunni||"—  (not awarded)"],
+                  ["📅 Date",  new Date().toLocaleDateString("en-PK",{day:"2-digit",month:"short",year:"numeric"})],
+                  ["🕐 Time",  new Date().toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})],
+                  ["📍 Location", form.location.trim()||"—  (not set)"],
                 ].map(([lbl,val])=>(
                   <div key={lbl} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,.05)"}}>
                     <span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"rgba(255,255,255,.35)",textTransform:"uppercase"}}>{lbl}</span>
-                    <span style={{fontSize:14,fontWeight:700,color:lbl.includes("MoM")&&!form.mom?"rgba(255,255,255,.3)":lbl.includes("Kunni")&&!form.kunni?"rgba(255,255,255,.3)":"#fff",textAlign:"right",fontStyle:(!form.mom&&lbl.includes("MoM"))||(!form.kunni&&lbl.includes("Kunni"))?"italic":"normal"}}>{val}</span>
+                    <span style={{fontSize:14,fontWeight:700,color:(lbl.includes("MoM")&&!form.mom)||(lbl.includes("Kunni")&&!form.kunni)||(lbl.includes("Location")&&!form.location.trim())?"rgba(255,255,255,.3)":"#fff",textAlign:"right",fontStyle:((lbl.includes("MoM")&&!form.mom)||(lbl.includes("Kunni")&&!form.kunni)||(lbl.includes("Location")&&!form.location.trim()))?"italic":"normal"}}>{val}</span>
                   </div>
                 ))}
               </div>
@@ -724,10 +845,10 @@ function App(){
         <div className="modal-bg">
           <div style={{background:"#0d0d0d",border:"1px solid rgba(239,68,68,.4)",borderRadius:18,padding:"28px 26px 22px",maxWidth:320,width:"100%",textAlign:"center"}}>
             <div style={{fontSize:40,marginBottom:12}}>⚠️</div>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:3,color:"#fff",marginBottom:8}}>RESET TOURNAMENT?</div>
+            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:3,color:th.t1,marginBottom:8}}>RESET TOURNAMENT?</div>
             <div style={{fontSize:13,color:"rgba(255,255,255,.4)",marginBottom:22,lineHeight:1.6}}>All game records will be permanently erased.</div>
             <div style={{display:"flex",gap:10,justifyContent:"center"}}>
-              <button className="rec-btn" onClick={doReset} style={{background:"linear-gradient(135deg,#7f1d1d,#ef4444)",boxShadow:"0 4px 20px rgba(239,68,68,.3)",fontSize:16,letterSpacing:2,padding:"12px 24px",color:"#fff"}}>Yes, Reset</button>
+              <button className="rec-btn" onClick={doReset} style={{background:"linear-gradient(135deg,#7f1d1d,#ef4444)",boxShadow:"0 4px 20px rgba(239,68,68,.3)",fontSize:16,letterSpacing:2,padding:"12px 24px",color:th.t1}}>Yes, Reset</button>
               <button className="ghost-btn" onClick={()=>setConfirmReset(false)} style={{padding:"12px 22px"}}>Cancel</button>
             </div>
           </div>
@@ -776,7 +897,7 @@ function StatBar({name,count,max,color,rank}){
   return (
     <div style={{marginBottom:12}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5}}>
-        <span style={{fontSize:13,fontWeight:700,color:"#fff"}}>{rank===1?"🥇":rank===2?"🥈":"🥉"} {name}</span>
+        <span style={{fontSize:13,fontWeight:700,color:th.t1}}>{rank===1?"🥇":rank===2?"🥈":"🥉"} {name}</span>
         <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:19,letterSpacing:1,color}}>{count}×</span>
       </div>
       <div style={{height:4,background:"rgba(255,255,255,.07)",borderRadius:2,overflow:"hidden"}}>
