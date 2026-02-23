@@ -389,9 +389,9 @@ function App(){
         </div>
         {kings&&(
           <div style={{display:"inline-flex",gap:16,alignItems:"center",marginTop:18,background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.4)",borderRadius:100,padding:"11px 28px"}}>
-            <span style={{fontSize:14,fontWeight:700,color:"#fef3c7"}}>👑 {teamOf(kings).players.join(" & ")} — <span style={{color:"#fbbf24"}}>KINGS</span></span>
+            <span style={{fontSize:24,fontWeight:700,color:"#fef3c7"}}>👑 {teamOf(kings).players.join(" & ")} — <span style={{color:"#fbbf24"}}>KINGS</span></span>
             <span style={{color:"rgba(255,255,255,.2)"}}>|</span>
-            <span style={{fontSize:14,fontWeight:600,color:"rgba(255,255,255,.4)"}}>⚰️ {otherTeam(kings).players.join(" & ")} — GHULAMS</span>
+            <span style={{fontSize:24,fontWeight:600,color:"rgba(255,255,255,.4)"}}>⚰️ {otherTeam(kings).players.join(" & ")} — GHULAMS</span>
           </div>
         )}
       </div>
@@ -475,7 +475,7 @@ function App(){
                   <thead>
                     <tr style={{background:"rgba(251,191,36,.07)"}}>
                       {["#","Set","Winner","Win Type","Pts","⭐ MoM","💩 Kunni","Time"].map(h=>(
-                        <th key={h} style={{padding:"11px 13px",textAlign:"left",fontSize:10,fontWeight:700,color:"rgba(255,255,255,.45)",textTransform:"uppercase",letterSpacing:1.5,borderBottom:"1px solid rgba(255,255,255,.07)"}}>{h}</th>
+                        <th key={h} style={{padding:"11px 13px",textAlign:"left",fontSize:14,fontWeight:700,color:"rgba(255,255,255,.45)",textTransform:"uppercase",letterSpacing:1.5,borderBottom:"1px solid rgba(255,255,255,.07)"}}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -514,7 +514,7 @@ function App(){
               {games.length>0&&<button className="print-btn" onClick={printAnalytics}>🖨 Print / Save PDF</button>}
             </div>
             {!games.length?(
-              <div className="card" style={{padding:50,textAlign:"center",color:"rgba(255,255,255,.2)",fontSize:15,fontStyle:"italic"}}>No data yet.</div>
+              <div className="card" style={{padding:50,textAlign:"center",color:"rgba(255,255,255,.2)",fontSize:25,fontStyle:"italic"}}>No data yet.</div>
             ):(
               <>
                 {/* MoM + Kunni leaderboards */}
@@ -644,7 +644,7 @@ function App(){
 
             {/* MoM — optional */}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-              <FieldLabel style={{marginBottom:0}}>⭐ MoM <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:9}}>optional · {wTeam.name}</span></FieldLabel>
+              <FieldLabel style={{marginBottom:0}}>⭐ MoM <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:12}}>optional · {wTeam.name}</span></FieldLabel>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:14}}>
               {wTeam.players.map(p=>(
@@ -655,7 +655,7 @@ function App(){
 
             {/* Kunni — optional */}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-              <FieldLabel style={{marginBottom:0}}>💩 Kunni <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:9}}>optional · {lTeam.name}</span></FieldLabel>
+              <FieldLabel style={{marginBottom:0}}>💩 Kunni <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:12}}>optional · {lTeam.name}</span></FieldLabel>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:18}}>
               {lTeam.players.map(p=>(
@@ -741,8 +741,8 @@ function App(){
 function ScorePanel({team,score,sets,isKing,isGhulam}){
   return (
     <div style={{padding:"22px 16px",textAlign:"center",position:"relative"}}>
-      {isKing&&<span style={{position:"absolute",top:10,right:12,fontSize:16}}>👑</span>}
-      {isGhulam&&<span style={{position:"absolute",top:10,right:12,fontSize:16}}>⚰️</span>}
+      {isKing&&<span style={{position:"absolute",top:10,right:12,fontSize:36}}>👑</span>}
+      {isGhulam&&<span style={{position:"absolute",top:10,right:12,fontSize:36}}>⚰️</span>}
       <div style={{fontSize:9,fontWeight:800,letterSpacing:5,color:team.light,textTransform:"uppercase",marginBottom:5,opacity:.8}}>{team.name}</div>
       <div style={{fontSize:14,fontWeight:700,color:"rgba(255,255,255,.75)",marginBottom:14}}>{team.players.join(" & ")}</div>
       <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:76,lineHeight:1,color:team.color,letterSpacing:2,textShadow:`0 0 40px ${team.glow}`}}>{score}</div>
