@@ -6,143 +6,203 @@
   <title>Maidaan-e-Rung — Peera Club</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
+    /* ── THEME VARIABLES ── */
+    :root{
+      --bg:#000;--c1:#fff;--c2:rgba(255,255,255,.75);--c3:rgba(255,255,255,.45);
+      --c4:rgba(255,255,255,.28);--c5:rgba(255,255,255,.18);
+      --card:rgba(13,13,13,.97);--card-b:rgba(255,255,255,.1);
+      --sep:rgba(255,255,255,.07);--sep2:rgba(255,255,255,.04);--row:rgba(255,255,255,.015);
+      --ghost:rgba(255,255,255,.07);--ghost-b:rgba(255,255,255,.14);
+      --choice:rgba(255,255,255,.04);--choice-b:rgba(255,255,255,.08);
+      --panel:rgba(10,10,10,.98);--input:rgba(255,255,255,.05);--input-b:rgba(255,255,255,.1);
+      --overlay:rgba(0,0,0,.9);--modal:rgba(13,13,13,1);--bar:rgba(255,255,255,.07);
+      --log-head:rgba(251,191,36,.07);--stat-bg:rgba(255,255,255,.05);
+      --scroll:#2a2a2a;--scroll-t:#0a0a0a;--fab-lbl:rgba(13,13,13,.97);--fab-bdr:#000;
+      --panel-hdr:linear-gradient(135deg,rgba(146,64,14,.5),rgba(251,191,36,.1));
+    }
+    .light{
+      --bg:#edf0f5;--c1:#0f0f0f;--c2:rgba(0,0,0,.72);--c3:rgba(0,0,0,.48);
+      --c4:rgba(0,0,0,.35);--c5:rgba(0,0,0,.2);
+      --card:rgba(255,255,255,.97);--card-b:rgba(0,0,0,.1);
+      --sep:rgba(0,0,0,.08);--sep2:rgba(0,0,0,.05);--row:rgba(0,0,0,.025);
+      --ghost:rgba(0,0,0,.06);--ghost-b:rgba(0,0,0,.13);
+      --choice:rgba(0,0,0,.04);--choice-b:rgba(0,0,0,.1);
+      --panel:rgba(255,255,255,.99);--input:rgba(0,0,0,.04);--input-b:rgba(0,0,0,.15);
+      --overlay:rgba(0,0,0,.55);--modal:#fff;--bar:rgba(0,0,0,.08);
+      --log-head:rgba(251,191,36,.1);--stat-bg:rgba(0,0,0,.04);
+      --scroll:#bbb;--scroll-t:#dde0e7;--fab-lbl:rgba(255,255,255,.99);--fab-bdr:#edf0f5;
+      --panel-hdr:linear-gradient(135deg,rgba(146,64,14,.6),rgba(251,191,36,.22));
+    }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html,body,#root{min-height:100%}
-    body{
-      background:#000;
-      font-family:'Inter','Segoe UI',system-ui,sans-serif;
-      color:#fff;
-      position:relative;
-    }
+    body{background:var(--bg);font-family:'Inter','Segoe UI',system-ui,sans-serif;color:var(--c1);position:relative;transition:background .3s,color .3s;}
     body::before{
-      content:'';
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       background-image:
-        /* bold diagonal slash lines — like a jersey/sportswear pattern */
-        repeating-linear-gradient(
-          -55deg,
-          transparent,
-          transparent 28px,
-          rgba(251,191,36,0.055) 28px,
-          rgba(251,191,36,0.055) 30px
-        ),
-        /* counter-diagonal for X diamond mesh */
-        repeating-linear-gradient(
-          55deg,
-          transparent,
-          transparent 28px,
-          rgba(251,191,36,0.03) 28px,
-          rgba(251,191,36,0.03) 30px
-        ),
-        /* subtle vertical rhythm */
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 79px,
-          rgba(251,191,36,0.02) 79px,
-          rgba(251,191,36,0.02) 80px
-        );
+        repeating-linear-gradient(-55deg,transparent,transparent 28px,rgba(251,191,36,.055) 28px,rgba(251,191,36,.055) 30px),
+        repeating-linear-gradient(55deg,transparent,transparent 28px,rgba(251,191,36,.03) 28px,rgba(251,191,36,.03) 30px),
+        repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(251,191,36,.02) 79px,rgba(251,191,36,.02) 80px);
+    }
+    body.light::before{
+      background-image:
+        repeating-linear-gradient(-55deg,transparent,transparent 28px,rgba(99,102,180,.07) 28px,rgba(99,102,180,.07) 30px),
+        repeating-linear-gradient(55deg,transparent,transparent 28px,rgba(99,102,180,.04) 28px,rgba(99,102,180,.04) 30px),
+        repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(99,102,180,.03) 79px,rgba(99,102,180,.03) 80px);
     }
     body::after{
-      content:'';
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
-      /* radial spotlight from top-center — like stadium lights */
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(251,191,36,0.07) 0%, transparent 70%),
-        /* subtle corner vignettes */
-        radial-gradient(ellipse 60% 60% at 0% 0%,   rgba(59,130,246,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 60% at 100% 0%,  rgba(239,68,68,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 40% at 50% 110%, rgba(0,0,0,0.8) 0%, transparent 70%);
+        radial-gradient(ellipse 80% 50% at 50% -10%,rgba(251,191,36,.07) 0%,transparent 70%),
+        radial-gradient(ellipse 60% 60% at 0% 0%,rgba(59,130,246,.04) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 0%,rgba(239,68,68,.04) 0%,transparent 60%),
+        radial-gradient(ellipse 80% 40% at 50% 110%,rgba(0,0,0,.8) 0%,transparent 70%);
+    }
+    body.light::after{
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%,rgba(251,191,36,.14) 0%,transparent 70%),
+        radial-gradient(ellipse 60% 60% at 0% 0%,rgba(59,130,246,.07) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 0%,rgba(239,68,68,.07) 0%,transparent 60%),
+        radial-gradient(ellipse 80% 40% at 50% 110%,rgba(255,255,255,.6) 0%,transparent 70%);
     }
     #root{position:relative;z-index:1}
+
     ::-webkit-scrollbar{width:5px}
-    ::-webkit-scrollbar-track{background:#0a0a0a}
-    ::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+    ::-webkit-scrollbar-track{background:var(--scroll-t)}
+    ::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:3px}
 
-    .card{background:rgba(13,13,13,0.97);border:1px solid rgba(255,255,255,0.1);border-radius:14px}
+    .card{background:var(--card);border:1px solid var(--card-b);border-radius:14px;transition:background .3s,border-color .3s}
 
-    .tab-btn{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:13px;font-weight:600;padding:10px 18px;border-bottom:3px solid transparent;letter-spacing:.5px;font-family:inherit;transition:.15s}
-    .tab-btn.on{color:#fff;border-bottom-color:#fbbf24}
-    .tab-btn:hover:not(.on){color:rgba(255,255,255,.7)}
+    .tab-btn{background:none;border:none;color:var(--c3);cursor:pointer;font-size:13px;font-weight:600;padding:10px 18px;border-bottom:3px solid transparent;letter-spacing:.5px;font-family:inherit;transition:.15s}
+    .tab-btn.on{color:var(--c1);border-bottom-color:#fbbf24}
+    .tab-btn:hover:not(.on){color:var(--c2)}
 
-    .choice{border-radius:10px;cursor:pointer;transition:all .15s;border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.65);font-family:inherit}
-    .choice:hover{background:rgba(255,255,255,0.09);color:#fff;border-color:rgba(255,255,255,0.2)}
-    .choice.sel-a{background:rgba(59,130,246,0.2)!important;border-color:#3b82f6!important;color:#93c5fd!important}
-    .choice.sel-b{background:rgba(239,68,68,0.2)!important;border-color:#ef4444!important;color:#fca5a5!important}
-    .choice.sel-red{background:rgba(239,68,68,0.18)!important;border-color:#ef4444!important;color:#fff!important}
-    .choice.sel-gold{background:rgba(251,191,36,0.18)!important;border-color:#fbbf24!important;color:#fef08a!important}
-    .choice.sel-none{background:rgba(255,255,255,0.07)!important;border-color:rgba(255,255,255,0.25)!important;color:rgba(255,255,255,0.6)!important}
+    .choice{border-radius:10px;cursor:pointer;transition:all .15s;border:1.5px solid var(--choice-b);background:var(--choice);color:var(--c3);font-family:inherit}
+    .choice:hover{background:var(--ghost);color:var(--c1);border-color:var(--ghost-b)}
+    .choice.sel-a{background:rgba(59,130,246,.2)!important;border-color:#3b82f6!important;color:#1d6fe0!important}
+    .choice.sel-b{background:rgba(239,68,68,.2)!important;border-color:#ef4444!important;color:#c92e2e!important}
+    .choice.sel-red{background:rgba(239,68,68,.18)!important;border-color:#ef4444!important;color:#c92e2e!important}
+    .choice.sel-gold{background:rgba(251,191,36,.18)!important;border-color:#fbbf24!important;color:#92400e!important}
+    .choice.sel-none{background:var(--ghost)!important;border-color:var(--c4)!important;color:var(--c3)!important}
+    body:not(.light) .choice.sel-a{color:#93c5fd!important}
+    body:not(.light) .choice.sel-b{color:#fca5a5!important}
+    body:not(.light) .choice.sel-red{color:#fff!important}
+    body:not(.light) .choice.sel-gold{color:#fef08a!important}
 
-    .rec-btn{width:100%;padding:15px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;background:linear-gradient(135deg,#92400e,#fbbf24);border:none;color:#000;border-radius:12px;cursor:pointer;transition:.15s;box-shadow:0 6px 28px rgba(251,191,36,0.3)}
-    .rec-btn:hover:not(:disabled){filter:brightness(1.1);box-shadow:0 8px 34px rgba(251,191,36,0.45)}
+    .rec-btn{width:100%;padding:15px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;background:linear-gradient(135deg,#92400e,#fbbf24);border:none;color:#000;border-radius:12px;cursor:pointer;transition:.15s;box-shadow:0 6px 28px rgba(251,191,36,.3)}
+    .rec-btn:hover:not(:disabled){filter:brightness(1.1);box-shadow:0 8px 34px rgba(251,191,36,.45)}
     .rec-btn:disabled{opacity:.35;cursor:not-allowed}
 
-    .ghost-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
-    .ghost-btn:hover{background:rgba(255,255,255,.13)}
-    .danger-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
+    .ghost-btn{background:var(--ghost);border:1px solid var(--ghost-b);color:var(--c2);border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
+    .ghost-btn:hover{filter:brightness(.94)}
+    .danger-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#dc2626;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;padding:10px 16px;font-family:inherit;transition:.15s}
+    body:not(.light) .danger-btn{color:#f87171}
     .danger-btn:hover{background:rgba(239,68,68,.2)}
-    .print-btn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#fde68a;border-radius:10px;cursor:pointer;font-weight:600;font-size:12px;padding:8px 14px;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+    .print-btn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#92400e;border-radius:10px;cursor:pointer;font-weight:600;font-size:12px;padding:8px 14px;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+    body:not(.light) .print-btn{color:#fde68a}
     .print-btn:hover{background:rgba(251,191,36,.2)}
 
-    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+    .modal-bg{position:fixed;inset:0;background:var(--overlay);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle{position:absolute;top:16px;right:20px;z-index:10;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid rgba(251,191,36,.25);color:rgba(255,255,255,.6);border-radius:20px;padding:6px 14px 6px 10px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:all .2s;letter-spacing:.5px;backdrop-filter:blur(4px);}
+    .theme-toggle:hover{background:rgba(0,0,0,.5);color:#fff}
+    body.light .theme-toggle{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.15);color:rgba(0,0,0,.6);}
+    body.light .theme-toggle:hover{background:rgba(255,255,255,.9);color:#000}
+    .toggle-track{width:30px;height:16px;border-radius:8px;position:relative;background:rgba(251,191,36,.25);border:1px solid rgba(251,191,36,.4);transition:background .2s;flex-shrink:0;}
+    body.light .toggle-track{background:rgba(251,191,36,.7)}
+    .toggle-knob{position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:#fbbf24;transition:transform .25s;}
+    body.light .toggle-knob{transform:translateX(14px)}
 
     /* ── FLOATING RECORD PANEL ── */
     .fab-wrap{position:fixed;bottom:28px;right:28px;z-index:900;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-
-    .fab-btn{
-      width:64px;height:64px;border-radius:50%;
-      background:linear-gradient(135deg,#92400e,#fbbf24);
-      border:none;cursor:pointer;
-      box-shadow:0 8px 32px rgba(251,191,36,.45);
-      display:flex;align-items:center;justify-content:center;
-      font-size:26px;transition:all .25s;
-      position:relative;
-    }
+    .fab-btn{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#92400e,#fbbf24);border:none;cursor:pointer;box-shadow:0 8px 32px rgba(251,191,36,.45);display:flex;align-items:center;justify-content:center;font-size:26px;transition:all .25s;position:relative;}
     .fab-btn:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(251,191,36,.6)}
-    .fab-btn .fab-label{
-      position:absolute;right:74px;top:50%;transform:translateY(-50%);
-      background:rgba(13,13,13,.97);border:1px solid rgba(251,191,36,.35);
-      color:#fbbf24;font-size:12px;font-weight:700;letter-spacing:1px;
-      padding:5px 12px;border-radius:8px;white-space:nowrap;
-      opacity:0;pointer-events:none;transition:opacity .2s;
-    }
+    .fab-btn .fab-label{position:absolute;right:74px;top:50%;transform:translateY(-50%);background:var(--fab-lbl);border:1px solid rgba(251,191,36,.35);color:#b45309;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 12px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;}
+    body:not(.light) .fab-btn .fab-label{color:#fbbf24}
     .fab-btn:hover .fab-label{opacity:1}
-    .fab-btn .fab-badge{
-      position:absolute;top:-4px;right:-4px;
-      background:#ef4444;color:#fff;font-size:10px;font-weight:800;
-      border-radius:50%;width:20px;height:20px;
-      display:flex;align-items:center;justify-content:center;
-      border:2px solid #000;
-    }
+    .fab-btn .fab-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border:2px solid var(--fab-bdr);}
 
-    .float-panel{
-      width:360px;
-      background:rgba(10,10,10,0.98);
-      border:1px solid rgba(251,191,36,.3);
-      border-radius:18px;
-      box-shadow:0 24px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(251,191,36,.08), 0 0 60px rgba(251,191,36,.08);
-      overflow:hidden;
-      transform-origin:bottom right;
-      transition:transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
-    }
+    .float-panel{width:360px;background:var(--panel);border:1px solid rgba(251,191,36,.3);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 60px rgba(251,191,36,.06);overflow:hidden;transform-origin:bottom right;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s,background .3s;}
     .float-panel.hidden{transform:scale(0.85) translateY(10px);opacity:0;pointer-events:none}
     .float-panel.visible{transform:scale(1) translateY(0);opacity:1}
-
     .float-panel-body{padding:18px 18px 20px;max-height:calc(100vh - 140px);overflow-y:auto}
     .float-panel-body::-webkit-scrollbar{width:4px}
-    .float-panel-body::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
+    .float-panel-body::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:2px}
 
     @keyframes glow-pulse{0%,100%{box-shadow:0 0 20px rgba(251,191,36,.3)}50%{box-shadow:0 0 44px rgba(251,191,36,.65)}}
     .seized-banner{background:linear-gradient(135deg,rgba(146,64,14,.4),rgba(251,191,36,.08));border:1px solid rgba(251,191,36,.5);border-radius:12px;padding:14px 16px;text-align:center;animation:glow-pulse 2s infinite}
+
+
+    /* ── RANKINGS ── */
+    .rankings-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+    .rank-card{border-radius:14px;padding:14px 10px;text-align:center;border:1px solid;transition:transform .2s}
+    .rank-card:hover{transform:translateY(-2px)}
+    .rank-gm{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,165,0,.08));border-color:rgba(255,215,0,.4)!important}
+    .rank-exp{background:linear-gradient(135deg,rgba(192,192,192,.15),rgba(160,160,160,.08));border-color:rgba(192,192,192,.35)!important}
+    .rank-am{background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(99,102,241,.06));border-color:rgba(99,149,255,.3)!important}
+    .rank-ch{background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(220,38,38,.06));border-color:rgba(239,68,68,.3)!important}
+    .rank-icon{font-size:28px;margin-bottom:6px;line-height:1}
+    .rank-label{font-family:'Orbitron',sans-serif;font-size:7px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.7}
+    .rank-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;line-height:1.1;margin-bottom:2px}
+    .rank-stat{font-size:10px;opacity:.55;font-weight:500}
+    .rank-gm .rank-label{color:#ffd700}
+    .rank-exp .rank-label{color:#c0c0c0}
+    .rank-am .rank-label{color:#7eb3ff}
+    .rank-ch .rank-label{color:#f87171}
+    body:not(.light) .rank-name{color:#fff}
+    body.light .rank-name{color:#111}
+
+    /* ── SPORTY HEADER ENHANCEMENTS ── */
+    .hero-stripe{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .hero-stripe::before{
+      content:'';position:absolute;
+      top:-40%;left:-10%;width:55%;height:200%;
+      background:linear-gradient(105deg,transparent 40%,rgba(59,130,246,.06) 40%,rgba(59,130,246,.06) 42%,transparent 42%);
+    }
+    .hero-stripe::after{
+      content:'';position:absolute;
+      top:-40%;right:-10%;width:55%;height:200%;
+      background:linear-gradient(-105deg,transparent 40%,rgba(239,68,68,.06) 40%,rgba(239,68,68,.06) 42%,transparent 42%);
+    }
+    .hero-num{
+      font-family:'Orbitron',sans-serif;
+      position:absolute;font-size:180px;font-weight:900;
+      opacity:.025;letter-spacing:-10px;pointer-events:none;
+      line-height:1;top:50%;transform:translateY(-50%);
+    }
+    .hero-num-l{left:-20px;color:#3b82f6}
+    .hero-num-r{right:-20px;color:#ef4444;text-align:right}
+    .live-pill{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);
+      border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;
+      letter-spacing:2px;color:#f87171;margin-bottom:10px;
+    }
+    body.light .live-pill{color:#dc2626;background:rgba(239,68,68,.1)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:#ef4444;animation:blink 1.2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    .score-glow-a{text-shadow:0 0 40px rgba(59,130,246,.5),0 0 10px rgba(59,130,246,.2)}
+    .score-glow-b{text-shadow:0 0 40px rgba(239,68,68,.5),0 0 10px rgba(239,68,68,.2)}
+    .vs-ticker{
+      font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;
+      letter-spacing:3px;color:#fbbf24;
+    }
+
+
+    /* ── SLIDE-IN DRAWER ── */
+    @keyframes slideInLeft{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes confettiFall{
+      0%{transform:rotate(var(--r,0deg)) translateY(0) scale(1);opacity:1}
+      80%{opacity:1}
+      100%{transform:rotate(calc(var(--r,0deg) + 720deg)) translateY(110vh) scale(.8);opacity:0}
+    }
+    @keyframes popIn{from{transform:translate(-50%,-50%) scale(.5);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+
+    /* ── SIDEBAR NAV hover glow ── */
+    .sidenav-btn:hover span:first-child{filter:drop-shadow(0 0 6px rgba(251,191,36,.6))}
 
     @media(max-width:650px){
       .float-panel{width:calc(100vw - 32px);right:0}
@@ -152,61 +212,130 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect, useMemo, useRef } = React;
-
-const TEAM_A = { id:"A", name:"Team A", players:["Farhan","Umair"],   color:"#3b82f6", glow:"rgba(59,130,246,0.5)", light:"#93c5fd" };
-const TEAM_B = { id:"B", name:"Team B", players:["Zeeshan","Haider"], color:"#ef4444", glow:"rgba(239,68,68,0.5)",  light:"#fca5a5" };
-
-const WIN_TYPES = [
-  { value:"simple",     label:"Simple Win",  pts:1, icon:"♠", desc:"Majority win" },
-  { value:"court",      label:"Court",       pts:2, icon:"💪", desc:"All cards taken" },
-  { value:"gooun",      label:"Gooun Court", pts:3, icon:"🔥", desc:"Beat their court" },
-  { value:"gandageeri", label:"Gandageeri",  pts:3, icon:"💀", desc:"Foul / offence" },
-];
-
-const MAX_PTS=3, GPSet=20, SETS=3, SK="maidaan-rung-v6";
-const getWT     = v => WIN_TYPES.find(w => w.value===v);
-const getPts    = v => getWT(v)?.pts ?? 1;
-const teamOf    = s => s==="A" ? TEAM_A : TEAM_B;
-const otherTeam = s => s==="A" ? TEAM_B : TEAM_A;
-
-function checkSeized(a, b, played) {
-  const rem=GPSet-played, mx=rem*MAX_PTS;
-  if (a > b+mx) return "A";
-  if (b > a+mx) return "B";
+<script>
+const {
+  useState,
+  useEffect,
+  useMemo,
+  useRef
+} = React;
+const TEAM_A = {
+  id: "A",
+  name: "Team A",
+  players: ["Farhan", "Umair"],
+  color: "#3b82f6",
+  glow: "rgba(59,130,246,0.5)",
+  light: "#93c5fd"
+};
+const TEAM_B = {
+  id: "B",
+  name: "Team B",
+  players: ["Zeeshan", "Haider"],
+  color: "#ef4444",
+  glow: "rgba(239,68,68,0.5)",
+  light: "#fca5a5"
+};
+const WIN_TYPES = [{
+  value: "simple",
+  label: "Simple Win",
+  pts: 1,
+  icon: "✨",
+  desc: "Majority win"
+}, {
+  value: "court",
+  label: "Court",
+  pts: 2,
+  icon: "💪",
+  desc: "All cards taken"
+}, {
+  value: "gooun",
+  label: "Gooun Court",
+  pts: 3,
+  icon: "🔥",
+  desc: "Beat their court"
+}, {
+  value: "gandageeri",
+  label: "Gandageeri",
+  pts: 3,
+  icon: "💀",
+  desc: "Foul / offence"
+}];
+const MAX_PTS = 3,
+  SETS = 3,
+  SK = "maidaan-rung-v6",
+  SK_CFG = "mr-config-v1";
+const getWT = v => WIN_TYPES.find(w => w.value === v);
+const getPts = v => {
+  var _getWT;
+  return ((_getWT = getWT(v)) === null || _getWT === void 0 ? void 0 : _getWT.pts) ?? 1;
+};
+const teamOf = s => s === "A" ? TEAM_A : TEAM_B;
+const otherTeam = s => s === "A" ? TEAM_B : TEAM_A;
+function checkSeized(a, b, played, gps) {
+  const rem = gps - played,
+    mx = rem * MAX_PTS;
+  if (a > b + mx) return "A";
+  if (b > a + mx) return "B";
   return null;
 }
-
-function buildSets(games) {
-  return Array.from({length:SETS},(_,i)=>{
-    const sg=games.filter(g=>g.set===i+1), played=sg.length;
-    const aScore=sg.filter(g=>g.winner==="A").reduce((a,g)=>a+getPts(g.winType),0);
-    const bScore=sg.filter(g=>g.winner==="B").reduce((a,g)=>a+getPts(g.winType),0);
-    const done=played>=GPSet, seized=!done?checkSeized(aScore,bScore,played):null;
-    const winner=done?(aScore>bScore?"A":bScore>aScore?"B":"draw"):seized;
-    return {n:i+1,sg,aScore,bScore,done,seized:!!seized,winner,played};
+function buildSets(games, gps) {
+  return Array.from({
+    length: SETS
+  }, (_, i) => {
+    const sg = games.filter(g => g.set === i + 1),
+      played = sg.length;
+    const aScore = sg.filter(g => g.winner === "A").reduce((a, g) => a + getPts(g.winType), 0);
+    const bScore = sg.filter(g => g.winner === "B").reduce((a, g) => a + getPts(g.winType), 0);
+    const done = played >= gps,
+      seized = !done ? checkSeized(aScore, bScore, played, gps) : null;
+    const winner = done ? aScore > bScore ? "A" : bScore > aScore ? "B" : "draw" : seized;
+    return {
+      n: i + 1,
+      sg,
+      aScore,
+      bScore,
+      done,
+      seized: !!seized,
+      winner,
+      played
+    };
   });
 }
-function activeSet(games,sets){
-  for(let i=0;i<SETS;i++){const s=sets[i];if(!s.done&&!s.seized)return s.n;}
+function activeSet(games, sets) {
+  for (let i = 0; i < SETS; i++) {
+    const s = sets[i];
+    if (!s.done && !s.seized) return s.n;
+  }
   return SETS;
 }
-
-const store={
-  async get(k){
-    if(window.storage){try{return await window.storage.get(k);}catch(_){}}
-    try{const v=localStorage.getItem(k);return v?{value:v}:null;}catch(_){}
+const store = {
+  async get(k) {
+    if (window.storage) {
+      try {
+        return await window.storage.get(k);
+      } catch (_) {}
+    }
+    try {
+      const v = localStorage.getItem(k);
+      return v ? {
+        value: v
+      } : null;
+    } catch (_) {}
     return null;
   },
-  async set(k,v){
-    if(window.storage){try{return await window.storage.set(k,v);}catch(_){}}
-    try{localStorage.setItem(k,v);}catch(_){}
+  async set(k, v) {
+    if (window.storage) {
+      try {
+        return await window.storage.set(k, v);
+      } catch (_) {}
+    }
+    try {
+      localStorage.setItem(k, v);
+    } catch (_) {}
   }
 };
-
-function printHTML(title, body){
-  const w=window.open("","_blank","width=900,height=700");
+function printHTML(title, body) {
+  const w = window.open("", "_blank", "width=900,height=700");
   w.document.write(`<!DOCTYPE html><html><head><title>Maidaan-e-Rung — ${title}</title>
   <style>
     body{font-family:'Segoe UI',sans-serif;padding:28px;color:#111;background:#fff;font-size:13px}
@@ -227,570 +356,2999 @@ function printHTML(title, body){
     footer{margin-top:28px;font-size:10px;color:#9ca3af;text-align:right;border-top:1px solid #e5e7eb;padding-top:10px}
     @media print{@page{margin:15mm}}
   </style></head><body>${body}
-  <footer>Peera Club · Maidaan-e-Rung · ${new Date().toLocaleDateString("en-PK",{day:"numeric",month:"long",year:"numeric"})}</footer>
+  <footer>Peera Club · Maidaan-e-Rung · ${new Date().toLocaleDateString("en-PK", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  })}</footer>
   <script>window.onload=()=>window.print()<\/script></body></html>`);
   w.document.close();
 }
 
 /* ════════════════════════════════════════ APP ════════════════════════════════════════ */
-function App(){
-  const [games,setGames]             = useState([]);
-  const [loading,setLoading]         = useState(true);
-  const [tab,setTab]                 = useState("log");
-  const [panelOpen,setPanelOpen]     = useState(false);
-  const [form,setForm]               = useState({winner:"A",winType:"simple",mom:null,kunni:null});
-  const [toast,setToast]             = useState(null);
-  const [confirmGame,setConfirmGame] = useState(false);
-  const [confirmReset,setConfirmReset]=useState(false);
-  const panelRef                     = useRef(null);
-
-  useEffect(()=>{
-    (async()=>{
-      try{const r=await store.get(SK);if(r?.value)setGames(JSON.parse(r.value));}catch(_){}
+function App() {
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState("log");
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('mr-theme') || 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
+  const [gamesPerSet, setGamesPerSet] = useState(() => {
+    try {
+      return parseInt(localStorage.getItem('mr-gps') || '20', 10);
+    } catch (e) {
+      return 20;
+    }
+  });
+  const [showSettings, setShowSettings] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [form, setForm] = useState({
+    winner: "A",
+    winType: "simple",
+    mom: null,
+    kunni: null,
+    location: ""
+  });
+  const [toast, setToast] = useState(null);
+  const [confirmGame, setConfirmGame] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [showPreResetPDF, setShowPreResetPDF] = useState(false);
+  const [navPanel, setNavPanel] = useState(null); // "log"|"analytics"|"rankings"|null
+  const [setWinMsg, setSetWinMsg] = useState(null); // {teamName,color} or null
+  const [confetti, setConfetti] = useState([]);
+  const panelRef = useRef(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await store.get(SK);
+        if (r !== null && r !== void 0 && r.value) setGames(JSON.parse(r.value));
+      } catch (_) {}
       setLoading(false);
     })();
-  },[]);
+  }, []);
+
+  // Theme: apply body class and persist
+  useEffect(() => {
+    document.body.classList.toggle('light', theme === 'light');
+    try {
+      localStorage.setItem('mr-theme', theme);
+    } catch (e) {}
+  }, [theme]);
+  function toggleTheme() {
+    setTheme(t => t === 'dark' ? 'light' : 'dark');
+  }
+
+  // Warn before refresh/close if games exist
+  useEffect(() => {
+    const handler = e => {
+      if (games.length > 0) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [games.length]);
+
+  // Persist gamesPerSet
+  useEffect(() => {
+    try {
+      localStorage.setItem('mr-gps', gamesPerSet);
+    } catch (e) {}
+  }, [gamesPerSet]);
 
   // Close panel on outside click
-  useEffect(()=>{
-    function handle(e){
-      if(panelOpen && panelRef.current && !panelRef.current.contains(e.target)) setPanelOpen(false);
+  useEffect(() => {
+    function handle(e) {
+      if (panelOpen && panelRef.current && !panelRef.current.contains(e.target)) setPanelOpen(false);
     }
-    document.addEventListener("mousedown",handle);
-    return()=>document.removeEventListener("mousedown",handle);
-  },[panelOpen]);
-
-  const saveGames=async g=>{try{await store.set(SK,JSON.stringify(g));}catch(_){}};
-
-  const sets    = useMemo(()=>buildSets(games),[games]);
-  const curSet  = useMemo(()=>activeSet(games,sets),[games,sets]);
-  const curSG   = games.filter(g=>g.set===curSet);
-  const aWins   = sets.filter(s=>s.winner==="A").length;
-  const bWins   = sets.filter(s=>s.winner==="B").length;
-  const isDone  = aWins>=2||bWins>=2||sets.every(s=>s.done||s.seized);
-  const kings   = isDone?(aWins>bWins?"A":bWins>aWins?"B":null):null;
-  const curInfo = sets[curSet-1];
-  const siezed  = curInfo?.seized;
-  const sWinner = curInfo?.winner;
-  const remaining=GPSet-curSG.length;
-
-  const wTeam=teamOf(form.winner), lTeam=otherTeam(form.winner);
-
-  function setWinner(w){
-    setForm(f=>({...f,winner:w,mom:null,kunni:null}));
+    document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, [panelOpen]);
+  const saveGames = async g => {
+    try {
+      await store.set(SK, JSON.stringify(g));
+    } catch (_) {}
+  };
+  const sets = useMemo(() => buildSets(games, gamesPerSet), [games, gamesPerSet]);
+  const curSet = useMemo(() => activeSet(games, sets), [games, sets]);
+  const curSG = games.filter(g => g.set === curSet);
+  const aWins = sets.filter(s => s.winner === "A").length;
+  const bWins = sets.filter(s => s.winner === "B").length;
+  const isDone = aWins >= 2 || bWins >= 2 || sets.every(s => s.done || s.seized);
+  const kings = isDone ? aWins > bWins ? "A" : bWins > aWins ? "B" : null : null;
+  const curInfo = sets[curSet - 1];
+  const siezed = curInfo === null || curInfo === void 0 ? void 0 : curInfo.seized;
+  const sWinner = curInfo === null || curInfo === void 0 ? void 0 : curInfo.winner;
+  const remaining = gamesPerSet - curSG.length;
+  const wTeam = teamOf(form.winner),
+    lTeam = otherTeam(form.winner);
+  function setWinner(w) {
+    setForm(f => ({
+      ...f,
+      winner: w,
+      mom: null,
+      kunni: null
+    }));
   }
-
-  function tryRecord(){
-    if(curSG.length>=GPSet||siezed){flash("This set is complete!","err");return;}
+  function tryRecord() {
+    if (curSG.length >= gamesPerSet || siezed) {
+      flash("This set is complete!", "err");
+      return;
+    }
     setConfirmGame(true);
   }
-
-  async function doRecord(){
+  async function doRecord() {
     setConfirmGame(false);
-    const g={
-      id:Date.now(),set:curSet,gameInSet:curSG.length+1,
-      gameNumber:games.length+1,winner:form.winner,winType:form.winType,
-      mom:form.mom||null,kunni:form.kunni||null,ts:new Date().toISOString()
+    const now = new Date();
+    const g = {
+      id: Date.now(),
+      set: curSet,
+      gameInSet: curSG.length + 1,
+      gameNumber: games.length + 1,
+      winner: form.winner,
+      winType: form.winType,
+      mom: form.mom || null,
+      kunni: form.kunni || null,
+      location: form.location.trim() || null,
+      ts: now.toISOString(),
+      date: now.toLocaleDateString("en-PK", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      }),
+      time: now.toLocaleTimeString("en-PK", {
+        hour: "2-digit",
+        minute: "2-digit"
+      })
     };
-    const updated=[...games,g];
-    setGames(updated);await saveGames(updated);
-    const ns=buildSets(updated)[curSet-1];
-    if(ns.seized&&ns.winner){
-      flash(`🏆 Set ${curSet} SEIZED by ${teamOf(ns.winner).name}!`,"seized");
+    const updated = [...games, g];
+    setGames(updated);
+    await saveGames(updated);
+    const ns = buildSets(updated, gamesPerSet)[curSet - 1];
+    if (ns.seized && ns.winner) {
+      const winTeam = teamOf(ns.winner);
+      setSetWinMsg({
+        teamName: winTeam.name,
+        color: winTeam.color,
+        glow: winTeam.glow,
+        players: winTeam.players
+      });
+      // Generate confetti particles
+      const particles = Array.from({
+        length: 60
+      }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        delay: Math.random() * 0.8,
+        dur: 1.5 + Math.random() * 1.5,
+        color: ["#fbbf24", "#3b82f6", "#ef4444", "#22c55e", "#a78bfa", "#f472b6", "#fff"][Math.floor(Math.random() * 7)],
+        size: 6 + Math.random() * 8,
+        rotate: Math.random() * 360
+      }));
+      setConfetti(particles);
+      setTimeout(() => {
+        setSetWinMsg(null);
+        setConfetti([]);
+      }, 3500);
     } else {
-      flash(`✔  Game #${g.gameNumber} saved!`,"ok");
+      flash(`✔  Game #${g.gameNumber} saved!`, "ok");
     }
   }
-
-  async function undoLast(){
-    if(!games.length)return;
-    const updated=games.slice(0,-1);setGames(updated);await saveGames(updated);
-    flash("Last game removed.","info");
+  async function undoLast() {
+    if (!games.length) return;
+    const updated = games.slice(0, -1);
+    setGames(updated);
+    await saveGames(updated);
+    flash("Last game removed.", "info");
   }
-
-  async function doReset(){
-    setGames([]);await saveGames([]);setConfirmReset(false);
-    flash("Tournament reset.","info");
+  async function doReset() {
+    // Snapshot current games for optional PDF export, then show PDF offer
+    setConfirmReset(false);
+    if (games.length > 0) {
+      setShowPreResetPDF(true);
+    } else {
+      await doResetConfirmed();
+    }
   }
-
-  function flash(msg,type){setToast({msg,type});setTimeout(()=>setToast(null),4000);}
-
-  const stats=useMemo(()=>{
-    const mom={},kunni={},wtC={simple:0,court:0,gooun:0,gandageeri:0};
-    for(const g of games){
-      if(g.mom) mom[g.mom]=(mom[g.mom]||0)+1;
-      if(g.kunni) kunni[g.kunni]=(kunni[g.kunni]||0)+1;
-      if(g.winType in wtC) wtC[g.winType]++;
+  async function doResetConfirmed() {
+    setShowPreResetPDF(false);
+    setGames([]);
+    await saveGames([]);
+    flash("Tournament reset.", "info");
+  }
+  function flash(msg, type) {
+    setToast({
+      msg,
+      type
+    });
+    setTimeout(() => setToast(null), 4000);
+  }
+  const stats = useMemo(() => {
+    const mom = {},
+      kunni = {},
+      wtC = {
+        simple: 0,
+        court: 0,
+        gooun: 0,
+        gandageeri: 0
+      };
+    for (const g of games) {
+      if (g.mom) mom[g.mom] = (mom[g.mom] || 0) + 1;
+      if (g.kunni) kunni[g.kunni] = (kunni[g.kunni] || 0) + 1;
+      if (g.winType in wtC) wtC[g.winType]++;
     }
     // per-player
-    const allPlayers=[...TEAM_A.players,...TEAM_B.players];
-    const playerStats={};
-    for(const p of allPlayers){
-      playerStats[p]={
-        mom:mom[p]||0,
-        kunni:kunni[p]||0,
-        wins:games.filter(g=>g.winner===(TEAM_A.players.includes(p)?"A":"B")).length
+    const allPlayers = [...TEAM_A.players, ...TEAM_B.players];
+    const playerStats = {};
+    for (const p of allPlayers) {
+      playerStats[p] = {
+        mom: mom[p] || 0,
+        kunni: kunni[p] || 0,
+        wins: games.filter(g => g.winner === (TEAM_A.players.includes(p) ? "A" : "B")).length
       };
     }
-    return{mom,kunni,wtC,playerStats,
-      momList:Object.entries(mom).sort((a,b)=>b[1]-a[1]),
-      kunniList:Object.entries(kunni).sort((a,b)=>b[1]-a[1]),
+    // Per-set rankings
+    const setRankings = sets.filter(s => s.done || s.seized).map(s => {
+      const sg = s.sg;
+      const pMom = {},
+        pKunni = {};
+      for (const g of sg) {
+        if (g.mom) pMom[g.mom] = (pMom[g.mom] || 0) + 1;
+        if (g.kunni) pKunni[g.kunni] = (pKunni[g.kunni] || 0) + 1;
+      }
+      const momSorted = Object.entries(pMom).sort((a, b) => b[1] - a[1]);
+      const kunniSorted = Object.entries(pKunni).sort((a, b) => b[1] - a[1]);
+      const grandMaster = momSorted[0] ? momSorted[0][0] : null;
+      const expert = momSorted[1] ? momSorted[1][0] : null;
+      const chootya = kunniSorted[0] ? kunniSorted[0][0] : null;
+      // Amateur: not grandMaster/expert/chootya, OR if tied choose fairest
+      const remaining = allPlayers.filter(p => p !== grandMaster && p !== expert && p !== chootya);
+      // If overlap (e.g. same person is grandmaster and chootya), just fill remaining
+      const used = new Set([grandMaster, expert, chootya].filter(Boolean));
+      const amateurs = allPlayers.filter(p => !used.has(p));
+      const amateur = amateurs[0] || remaining[0] || null;
+      return {
+        n: s.n,
+        grandMaster,
+        expert,
+        amateur,
+        chootya,
+        momStats: pMom,
+        kunniStats: pKunni
+      };
+    });
+    // Overall tournament rankings
+    const momSortedAll = Object.entries(mom).sort((a, b) => b[1] - a[1]);
+    const kunniSortedAll = Object.entries(kunni).sort((a, b) => b[1] - a[1]);
+    const overallGrandMaster = momSortedAll[0] ? momSortedAll[0][0] : null;
+    const overallExpert = momSortedAll[1] ? momSortedAll[1][0] : null;
+    const overallChootya = kunniSortedAll[0] ? kunniSortedAll[0][0] : null;
+    const usedOverall = new Set([overallGrandMaster, overallExpert, overallChootya].filter(Boolean));
+    const overallAmateur = allPlayers.find(p => !usedOverall.has(p)) || null;
+    const overallRanking = {
+      grandMaster: overallGrandMaster,
+      expert: overallExpert,
+      amateur: overallAmateur,
+      chootya: overallChootya
     };
-  },[games]);
+    return {
+      mom,
+      kunni,
+      wtC,
+      playerStats,
+      setRankings,
+      overallRanking,
+      momList: Object.entries(mom).sort((a, b) => b[1] - a[1]),
+      kunniList: Object.entries(kunni).sort((a, b) => b[1] - a[1])
+    };
+  }, [games]);
 
   /* print helpers */
-  function printLog(){
-    const setRows=sets.map(s=>`<tr><td><b>Set ${s.n}</b></td><td class="blue" style="font-weight:800;font-size:15px">${s.aScore}</td><td class="red" style="font-weight:800;font-size:15px">${s.bScore}</td><td>${s.played}/20</td><td>${s.seized&&!s.done?"SEIZED":s.done?"Completed":"In Progress"}</td><td style="font-weight:700">${s.winner?(s.winner==="A"?"Team A":"Team B"):"-"}</td></tr>`).join("");
-    const gameRows=[...games].reverse().map(g=>{
-      const wt=getWT(g.winType);
-      return `<tr><td>${g.gameNumber}</td><td>S${g.set}</td><td class="${g.winner==="A"?"blue":"red"}" style="font-weight:700">${g.winner==="A"?"Team A":"Team B"}</td><td>${wt?.icon} ${wt?.label}</td><td style="font-weight:800">${wt?.pts}</td><td class="gold" style="font-weight:700">${g.mom?`⭐ ${g.mom}`:"—"}</td><td class="red">${g.kunni?`💩 ${g.kunni}`:"—"}</td><td>${new Date(g.ts).toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}</td></tr>`;
+  function printLog() {
+    const setRows = sets.map(s => `<tr><td><b>Set ${s.n}</b></td><td class="blue" style="font-weight:800;font-size:15px">${s.aScore}</td><td class="red" style="font-weight:800;font-size:15px">${s.bScore}</td><td>${s.played}/{gamesPerSet}</td><td>${s.seized && !s.done ? "SEIZED" : s.done ? "Completed" : "In Progress"}</td><td style="font-weight:700">${s.winner ? s.winner === "A" ? "Team A" : "Team B" : "-"}</td></tr>`).join("");
+    const gameRows = [...games].reverse().map(g => {
+      const wt = getWT(g.winType);
+      return `<tr><td>${g.gameNumber}</td><td>S${g.set}</td><td class="${g.winner === "A" ? "blue" : "red"}" style="font-weight:700">${g.winner === "A" ? "Team A" : "Team B"}</td><td>${wt === null || wt === void 0 ? void 0 : wt.icon} ${wt === null || wt === void 0 ? void 0 : wt.label}</td><td style="font-weight:800">${wt === null || wt === void 0 ? void 0 : wt.pts}</td><td class="gold" style="font-weight:700">${g.mom ? `⭐ ${g.mom}` : "—"}</td><td class="red">${g.kunni ? `💩 ${g.kunni}` : "—"}</td><td>${g.date || new Date(g.ts).toLocaleDateString("en-PK", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      })}</td><td>${g.time || new Date(g.ts).toLocaleTimeString("en-PK", {
+        hour: "2-digit",
+        minute: "2-digit"
+      })}</td><td>${g.location ? `📍 ${g.location}` : "—"}</td></tr>`;
     }).join("");
-    printHTML("Game Log",`<h1>Maidaan-e-Rung — Game Log</h1><p class="sub">Peera Club · Quarterly Tournament · ${games.length} games recorded</p><h2>Set Summary</h2><table><thead><tr><th>Set</th><th>Team A Pts</th><th>Team B Pts</th><th>Games</th><th>Status</th><th>Winner</th></tr></thead><tbody>${setRows}</tbody></table><h2>Full Game Log</h2><table><thead><tr><th>#</th><th>Set</th><th>Winner</th><th>Win Type</th><th>Pts</th><th>MoM</th><th>Kunni</th><th>Time</th></tr></thead><tbody>${gameRows}</tbody></table>`);
+    printHTML("Game Log", `<h1>Maidaan-e-Rung — Game Log</h1><p class="sub">Peera Club · Quarterly Tournament · ${games.length} games recorded</p><h2>Set Summary</h2><table><thead><tr><th>Set</th><th>Team A Pts</th><th>Team B Pts</th><th>Games</th><th>Status</th><th>Winner</th></tr></thead><tbody>${setRows}</tbody></table><h2>Full Game Log</h2><table><thead><tr><th>#</th><th>Set</th><th>Winner</th><th>Win Type</th><th>Pts</th><th>MoM</th><th>Kunni</th><th>Date</th><th>Time</th><th>Location</th></tr></thead><tbody>${gameRows}</tbody></table>`);
   }
-
-  function printAnalytics(){
-    const momRows=stats.momList.map(([n,c],i)=>`<div class="sr"><span style="font-weight:700">${i===0?"🥇":i===1?"🥈":"🥉"} ${n}</span><span class="sv">${c}×</span></div>`).join("");
-    const kunniRows=stats.kunniList.map(([n,c],i)=>`<div class="sr"><span style="font-weight:700">${i===0?"🥇":i===1?"🥈":"🥉"} ${n}</span><span class="sv" style="color:#2563eb">${c}×</span></div>`).join("");
-    const wtRows=WIN_TYPES.map(wt=>{const c=stats.wtC[wt.value]||0,pct=games.length?Math.round((c/games.length)*100):0;return`<tr><td style="font-weight:600">${wt.icon} ${wt.label}</td><td style="font-weight:700">${c}</td><td>${pct}%</td><td style="font-weight:700">+${wt.pts}pt${wt.pts>1?"s":""}</td></tr>`;}).join("");
-    const playerRows=[...TEAM_A.players,...TEAM_B.players].map(p=>{
-      const isA=TEAM_A.players.includes(p),tm=isA?TEAM_A:TEAM_B,ps=stats.playerStats[p]||{wins:0,mom:0,kunni:0};
-      return`<tr><td style="font-weight:700">${p}</td><td>${tm.name}</td><td class="${isA?"blue":"red"}" style="font-weight:800;font-size:15px">${ps.wins}</td><td class="gold" style="font-weight:700">${ps.mom}</td><td class="red">${ps.kunni}</td></tr>`;
+  function printAnalytics() {
+    const or = stats.overallRanking;
+    const rankDefs = [{
+      cls: "gm",
+      icon: "🏆",
+      label: "Grand Master",
+      name: or.grandMaster,
+      stat: or.grandMaster ? `${stats.mom[or.grandMaster] || 0} MoM total` : ""
+    }, {
+      cls: "exp",
+      icon: "🥈",
+      label: "Expert",
+      name: or.expert,
+      stat: or.expert ? `${stats.mom[or.expert] || 0} MoM total` : ""
+    }, {
+      cls: "am",
+      icon: "🎯",
+      label: "Amateur",
+      name: or.amateur,
+      stat: "fair performance"
+    }, {
+      cls: "ch",
+      icon: "💩",
+      label: "Chootya",
+      name: or.chootya,
+      stat: or.chootya ? `${stats.kunni[or.chootya] || 0} kunni total` : ""
+    }];
+    const rankCards = rankDefs.filter(r => r.name).map(r => `<div class="rk-card rk-${r.cls}"><div class="rk-icon">${r.icon}</div><div class="rk-lbl">${r.label}</div><div class="rk-name">${r.name}</div><div class="rk-stat">${r.stat}</div></div>`).join("");
+    const momRows = stats.momList.map((_ref, i) => {
+      let [n, c] = _ref;
+      return `<div class="sr"><span style="font-weight:700">${i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉"} ${n}</span><span class="sv">${c}×</span></div>`;
     }).join("");
-    const setRows=sets.map(s=>`<tr><td><b>Set ${s.n}</b></td><td class="blue" style="font-weight:800;font-size:15px">${s.aScore}</td><td class="red" style="font-weight:800;font-size:15px">${s.bScore}</td><td>${s.played}/20</td><td>${s.winner?(s.winner==="A"?"Team A":"Team B"):"-"}</td></tr>`).join("");
-    printHTML("Analytics",`<h1>Maidaan-e-Rung — Analytics</h1><p class="sub">Peera Club · Quarterly Tournament · ${games.length} total games</p><div class="sg"><div class="sc"><h3>⭐ Man of the Match</h3>${momRows||"<p>No data</p>"}</div><div class="sc"><h3>💩 Kunni - Hall of Shame</h3>${kunniRows||"<p>No data</p>"}</div></div><h2>Win Type Breakdown</h2><table><thead><tr><th>Type</th><th>Count</th><th>Share</th><th>Points</th></tr></thead><tbody>${wtRows}</tbody></table><h2>Player Stats</h2><table><thead><tr><th>Player</th><th>Team</th><th>Wins</th><th>MoM</th><th>Kunni</th></tr></thead><tbody>${playerRows}</tbody></table><h2>Set Results</h2><table><thead><tr><th>Set</th><th>Team A</th><th>Team B</th><th>Games</th><th>Winner</th></tr></thead><tbody>${setRows}</tbody></table>`);
+    const kunniRows = stats.kunniList.map((_ref2, i) => {
+      let [n, c] = _ref2;
+      return `<div class="sr"><span style="font-weight:700">${i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉"} ${n}</span><span class="sv" style="color:#2563eb">${c}×</span></div>`;
+    }).join("");
+    const wtRows = WIN_TYPES.map(wt => {
+      const c = stats.wtC[wt.value] || 0,
+        pct = games.length ? Math.round(c / games.length * 100) : 0;
+      return `<tr><td style="font-weight:600">${wt.icon} ${wt.label}</td><td style="font-weight:700">${c}</td><td>${pct}%</td><td style="font-weight:700">+${wt.pts}pt${wt.pts > 1 ? "s" : ""}</td></tr>`;
+    }).join("");
+    const playerRows = [...TEAM_A.players, ...TEAM_B.players].map(p => {
+      const isA = TEAM_A.players.includes(p),
+        tm = isA ? TEAM_A : TEAM_B,
+        ps = stats.playerStats[p] || {
+          wins: 0,
+          mom: 0,
+          kunni: 0
+        };
+      return `<tr><td style="font-weight:700">${p}</td><td>${tm.name}</td><td class="${isA ? "blue" : "red"}" style="font-weight:800;font-size:15px">${ps.wins}</td><td class="gold" style="font-weight:700">${ps.mom}</td><td class="red">${ps.kunni}</td></tr>`;
+    }).join("");
+    const setRows = sets.map(s => `<tr><td><b>Set ${s.n}</b></td><td class="blue" style="font-weight:800;font-size:15px">${s.aScore}</td><td class="red" style="font-weight:800;font-size:15px">${s.bScore}</td><td>${s.played}/{gamesPerSet}</td><td>${s.winner ? s.winner === "A" ? "Team A" : "Team B" : "-"}</td></tr>`).join("");
+    printHTML("Analytics", `<style>.rk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 22px}.rk-card{border-radius:10px;padding:14px 10px;text-align:center;border:1.5px solid #ddd}.rk-gm{background:#fffbeb;border-color:#f59e0b}.rk-exp{background:#f8fafc;border-color:#94a3b8}.rk-am{background:#eff6ff;border-color:#3b82f6}.rk-ch{background:#fff1f2;border-color:#f87171}.rk-icon{font-size:26px;margin-bottom:5px}.rk-lbl{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;opacity:.6}.rk-name{font-size:14px;font-weight:800;color:#111;margin-bottom:2px}.rk-stat{font-size:10px;color:#666}</style><h1>Maidaan-e-Rung — Analytics</h1><p class="sub">Peera Club · Quarterly Tournament · ${games.length} total games</p><h2>🏆 Overall Player Rankings</h2><div class="rk-grid">${rankCards}</div><div class="sg"><div class="sc"><h3>⭐ Man of the Match</h3>${momRows || "<p>No data</p>"}</div><div class="sc"><h3>💩 Kunni Hall of Shame</h3>${kunniRows || "<p>No data</p>"}</div></div><h2>Win Type Breakdown</h2><table><thead><tr><th>Type</th><th>Count</th><th>Share</th><th>Points</th></tr></thead><tbody>${wtRows}</tbody></table><h2>Player Stats</h2><table><thead><tr><th>Player</th><th>Team</th><th>Wins</th><th>MoM</th><th>Kunni</th></tr></thead><tbody>${playerRows}</tbody></table><h2>Set Results</h2><table><thead><tr><th>Set</th><th>Team A</th><th>Team B</th><th>Games</th><th>Winner</th></tr></thead><tbody>${setRows}</tbody></table>`);
   }
-
-  if(loading) return <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>Loading…</div>;
-
-  const gap=Math.abs(curInfo.aScore-curInfo.bScore);
-  const leadingNow=curInfo.aScore>=curInfo.bScore?"A":"B";
-
-  return (
-    <div style={{minHeight:"100vh",paddingBottom:100}}>
-
-      {/* TOAST */}
-      {toast&&(
-        <div style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",zIndex:99999,background:toast.type==="ok"?"#14532d":toast.type==="err"?"#450a0a":toast.type==="seized"?"#1c1000":"#1e3a5f",border:`1px solid ${toast.type==="ok"?"#22c55e":toast.type==="err"?"#ef4444":toast.type==="seized"?"#fbbf24":"#3b82f6"}`,color:"#fff",padding:"13px 22px",borderRadius:10,fontSize:14,fontWeight:600,boxShadow:"0 8px 32px rgba(0,0,0,.8)",maxWidth:380,textAlign:"center",lineHeight:1.5}}>
-          {toast.msg}
-        </div>
-      )}
-
-      {/* HEADER */}
-      <div style={{background:"linear-gradient(180deg,rgba(20,10,0,0.97) 0%,rgba(0,0,0,0.95) 100%)",borderBottom:"1px solid rgba(251,191,36,0.2)",padding:"36px 24px 28px",textAlign:"center",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",top:0,left:0,width:160,height:160,background:"radial-gradient(circle at 0 0,rgba(251,191,36,0.13),transparent 70%)"}}/>
-        <div style={{position:"absolute",top:0,right:0,width:160,height:160,background:"radial-gradient(circle at 100% 0,rgba(251,191,36,0.13),transparent 70%)"}}/>
-        <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:"linear-gradient(90deg,transparent,#fbbf24,transparent)"}}/>
-        <p style={{fontSize:10,letterSpacing:8,color:"rgba(251,191,36,0.55)",fontWeight:800,textTransform:"uppercase",marginBottom:12}}>♠  Peera Club · Quarterly Tournament  ♠</p>
-        <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(48px,8vw,84px)",letterSpacing:8,lineHeight:1,color:"#fff",textShadow:"0 0 80px rgba(251,191,36,0.4),0 0 20px rgba(251,191,36,0.15)"}}>Maidaan-e-Rung</h1>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:14,marginTop:10}}>
-          <div style={{height:1,width:70,background:"linear-gradient(90deg,transparent,rgba(251,191,36,0.4))"}}/>
-          <span style={{fontSize:14,color:"rgba(255,255,255,0.25)",letterSpacing:6,fontStyle:"italic"}}>میدانِ رنگ</span>
-          <div style={{height:1,width:70,background:"linear-gradient(90deg,rgba(251,191,36,0.4),transparent)"}}/>
-        </div>
-        {kings&&(
-          <div style={{display:"inline-flex",gap:16,alignItems:"center",marginTop:18,background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.4)",borderRadius:100,padding:"11px 28px"}}>
-            <span style={{fontSize:24,fontWeight:700,color:"#fef3c7"}}>👑 {teamOf(kings).players.join(" & ")} — <span style={{color:"#fbbf24"}}>KINGS</span></span>
-            <span style={{color:"rgba(255,255,255,.2)"}}>|</span>
-            <span style={{fontSize:24,fontWeight:600,color:"rgba(255,255,255,.4)"}}>⚰️ {otherTeam(kings).players.join(" & ")} — GHULAMS</span>
-          </div>
-        )}
-      </div>
-
-      {/* BODY */}
-      <div style={{maxWidth:960,margin:"0 auto",padding:"20px 16px 20px"}}>
-
-        {/* SCOREBOARD */}
-        <div className="card" style={{overflow:"hidden",marginBottom:12}}>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 100px 1fr"}}>
-            <ScorePanel team={TEAM_A} score={curInfo.aScore} sets={sets} isKing={kings==="A"} isGhulam={kings==="B"}/>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",borderLeft:"1px solid rgba(255,255,255,.06)",borderRight:"1px solid rgba(255,255,255,.06)",background:"rgba(255,255,255,.02)",padding:"20px 0",gap:8}}>
-              <div style={{fontSize:9,fontWeight:800,letterSpacing:4,color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>Set {curSet}</div>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,color:"#fbbf24",letterSpacing:3,lineHeight:1}}>VS</div>
-              <div style={{fontSize:11,fontWeight:600,color:"rgba(255,255,255,.3)"}}>{curSG.length}<span style={{opacity:.5}}>/20</span></div>
-              <div style={{width:40,height:3,background:"rgba(255,255,255,.08)",borderRadius:2,overflow:"hidden"}}>
-                <div style={{width:`${(curSG.length/GPSet)*100}%`,height:"100%",background:"#fbbf24",transition:"width .4s"}}/>
-              </div>
-            </div>
-            <ScorePanel team={TEAM_B} score={curInfo.bScore} sets={sets} isKing={kings==="B"} isGhulam={kings==="A"}/>
-          </div>
-          {!siezed&&curSG.length>0&&(
-            <div style={{borderTop:"1px solid rgba(255,255,255,.06)",padding:"9px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",background:"rgba(255,255,255,.02)"}}>
-              <span style={{fontSize:11,color:"rgba(255,255,255,.3)",fontWeight:500}}><span style={{color:"rgba(251,191,36,.5)"}}>●</span> {remaining} games left · max {remaining*MAX_PTS} pts available</span>
-              <span style={{fontSize:11,color:"rgba(255,255,255,.3)",fontWeight:500}}>Lead: <span style={{color:leadingNow==="A"?TEAM_A.light:TEAM_B.light,fontWeight:700}}>{gap} pts — {teamOf(leadingNow).name}</span></span>
-            </div>
-          )}
-          {siezed&&(
-            <div style={{borderTop:"1px solid rgba(251,191,36,.3)",padding:"14px 20px",background:"rgba(251,191,36,.07)",display:"flex",alignItems:"center",justifyContent:"center",gap:12}}>
-              <span style={{fontSize:22}}>🏆</span>
-              <div style={{textAlign:"center"}}>
-                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:3,color:"#fbbf24"}}>SET {curSet} SEIZED — {teamOf(sWinner).name.toUpperCase()} WINS</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,.4)",marginTop:2}}>Other team cannot catch up even with max points remaining</div>
-              </div>
-              <span style={{fontSize:22}}>🏆</span>
-            </div>
-          )}
-        </div>
-
-        {/* SET TRACKER */}
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:18}}>
-          {sets.map(s=>(
-            <div key={s.n} className="card" style={{padding:"12px 14px",borderColor:s.n===curSet?"rgba(251,191,36,.4)":"rgba(255,255,255,.07)",background:s.n===curSet?"rgba(251,191,36,.06)":"rgba(13,13,13,.97)"}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                <span style={{fontSize:9,fontWeight:800,letterSpacing:3,color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>Set {s.n}</span>
-                {s.seized&&!s.done&&<span style={{fontSize:9,fontWeight:700,background:"rgba(251,191,36,.2)",color:"#fbbf24",borderRadius:4,padding:"1px 6px",letterSpacing:1}}>SEIZED</span>}
-                {s.done&&<span style={{fontSize:9,fontWeight:700,background:"rgba(34,197,94,.2)",color:"#86efac",borderRadius:4,padding:"1px 6px",letterSpacing:1}}>DONE</span>}
-              </div>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10}}>
-                <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,color:"#60a5fa",letterSpacing:2}}>{s.aScore}</span>
-                <span style={{color:"rgba(255,255,255,.15)",fontSize:14}}>—</span>
-                <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,color:"#f87171",letterSpacing:2}}>{s.bScore}</span>
-              </div>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6}}>
-                <span style={{fontSize:10,color:"rgba(255,255,255,.25)"}}>{s.played}/20</span>
-                {s.winner&&<span style={{fontSize:10,fontWeight:700,color:s.winner==="A"?"#93c5fd":"#fca5a5"}}>{s.winner==="A"?"🔵 A":"🔴 B"} Wins</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* TABS */}
-        <div style={{borderBottom:"1px solid rgba(255,255,255,.08)",marginBottom:0}}>
-          {[["log","📜  Game Log"],["analytics","📊  Analytics"]].map(([id,lbl])=>(
-            <button key={id} className={`tab-btn${tab===id?" on":""}`} onClick={()=>setTab(id)}>{lbl}</button>
-          ))}
-        </div>
-
-        {/* LOG TAB */}
-        {tab==="log"&&(
-          <div style={{marginTop:16}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-              <span style={{fontSize:12,color:"rgba(255,255,255,.35)",fontWeight:500}}>{games.length} games recorded</span>
-              {games.length>0&&<button className="print-btn" onClick={printLog}>🖨 Print / Save PDF</button>}
-            </div>
-            {!games.length?(
-              <div className="card" style={{padding:50,textAlign:"center",color:"rgba(255,255,255,.2)",fontSize:15,fontStyle:"italic"}}>No games recorded yet.</div>
-            ):(
-              <div className="card" style={{overflow:"hidden"}}>
-                <table style={{width:"100%",borderCollapse:"collapse"}}>
-                  <thead>
-                    <tr style={{background:"rgba(251,191,36,.07)"}}>
-                      {["#","Set","Winner","Win Type","Pts","⭐ MoM","💩 Kunni","Time"].map(h=>(
-                        <th key={h} style={{padding:"11px 13px",textAlign:"left",fontSize:14,fontWeight:700,color:"rgba(255,255,255,.45)",textTransform:"uppercase",letterSpacing:1.5,borderBottom:"1px solid rgba(255,255,255,.07)"}}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[...games].reverse().map((g,i)=>{
-                      const wt=getWT(g.winType),isA=g.winner==="A";
-                      return (
-                        <tr key={g.id} style={{borderBottom:"1px solid rgba(255,255,255,.04)",background:i%2?"rgba(255,255,255,.015)":"transparent"}}>
-                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:600,color:"rgba(255,255,255,.35)"}}>{g.gameNumber}</td>
-                          <td style={{padding:"10px 13px",fontSize:11,color:"rgba(255,255,255,.3)"}}>S{g.set}</td>
-                          <td style={{padding:"10px 13px"}}><span style={{fontSize:13,fontWeight:700,color:isA?"#93c5fd":"#fca5a5"}}>{isA?"🔵 Team A":"🔴 Team B"}</span></td>
-                          <td style={{padding:"10px 13px"}}>
-                            <span style={{background:wt?.value==="gandageeri"?"rgba(239,68,68,.2)":wt?.value==="gooun"?"rgba(251,191,36,.12)":wt?.value==="court"?"rgba(34,197,94,.1)":"rgba(255,255,255,.06)",color:wt?.value==="gandageeri"?"#fca5a5":wt?.value==="gooun"?"#fde047":wt?.value==="court"?"#86efac":"rgba(255,255,255,.6)",borderRadius:5,padding:"2px 9px",fontSize:11,fontWeight:600}}>
-                              {wt?.icon} {wt?.label}
-                            </span>
-                          </td>
-                          <td style={{padding:"10px 13px",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,color:"#fbbf24",letterSpacing:1}}>{wt?.pts}</td>
-                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:700,color:g.mom?"#fde047":"rgba(255,255,255,.2)",fontStyle:g.mom?"normal":"italic"}}>{g.mom?`⭐ ${g.mom}`:"—"}</td>
-                          <td style={{padding:"10px 13px",fontSize:12,fontWeight:700,color:g.kunni?"#f87171":"rgba(255,255,255,.2)",fontStyle:g.kunni?"normal":"italic"}}>{g.kunni?`💩 ${g.kunni}`:"—"}</td>
-                          <td style={{padding:"10px 13px",fontSize:11,color:"rgba(255,255,255,.2)"}}>{new Date(g.ts).toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ANALYTICS TAB */}
-        {tab==="analytics"&&(
-          <div style={{marginTop:16}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-              <span style={{fontSize:12,color:"rgba(255,255,255,.35)",fontWeight:500}}>Tournament statistics</span>
-              {games.length>0&&<button className="print-btn" onClick={printAnalytics}>🖨 Print / Save PDF</button>}
-            </div>
-            {!games.length?(
-              <div className="card" style={{padding:50,textAlign:"center",color:"rgba(255,255,255,.2)",fontSize:25,fontStyle:"italic"}}>No data yet.</div>
-            ):(
-              <>
-                {/* MoM + Kunni leaderboards */}
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-                  <ACard title="⭐ Man of the Match" accent="#fde047">
-                    {!stats.momList.length?<NoData msg="No MoM awarded yet"/>:stats.momList.map(([n,c],i)=><StatBar key={n} name={n} count={c} max={stats.momList[0][1]} color="#fde047" rank={i+1}/>)}
-                  </ACard>
-                  <ACard title="💩 Kunni Hall of Shame" accent="#f87171">
-                    {!stats.kunniList.length?<NoData msg="No Kunni awarded yet"/>:stats.kunniList.map(([n,c],i)=><StatBar key={n} name={n} count={c} max={stats.kunniList[0][1]} color="#f87171" rank={i+1}/>)}
-                  </ACard>
-                </div>
-
-                {/* Per-player full stats */}
-                <ACard title="👤  Player Breakdown" accent="#a78bfa">
-                  <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:10}}>
-                    {[...TEAM_A.players,...TEAM_B.players].map(p=>{
-                      const isA=TEAM_A.players.includes(p),tm=isA?TEAM_A:TEAM_B;
-                      const ps=stats.playerStats[p]||{wins:0,mom:0,kunni:0};
-                      return (
-                        <div key={p} style={{background:"rgba(255,255,255,.04)",border:`1px solid ${tm.color}25`,borderRadius:12,padding:"14px 16px",display:"flex",alignItems:"center",gap:14}}>
-                          <div style={{fontSize:32,flexShrink:0}}>{isA?"🔵":"🔴"}</div>
-                          <div style={{flex:1}}>
-                            <div style={{fontSize:15,fontWeight:700,color:"#fff"}}>{p}</div>
-                            <div style={{fontSize:11,color:"rgba(255,255,255,.35)",marginBottom:10}}>{tm.name}</div>
-                            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,textAlign:"center"}}>
-                              <div style={{background:"rgba(255,255,255,.05)",borderRadius:8,padding:"6px 4px"}}>
-                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:tm.light,lineHeight:1}}>{ps.wins}</div>
-                                <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>Wins</div>
-                              </div>
-                              <div style={{background:"rgba(251,191,36,.08)",borderRadius:8,padding:"6px 4px"}}>
-                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:"#fde047",lineHeight:1}}>{ps.mom}</div>
-                                <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>MoM</div>
-                              </div>
-                              <div style={{background:"rgba(239,68,68,.08)",borderRadius:8,padding:"6px 4px"}}>
-                                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,color:"#f87171",lineHeight:1}}>{ps.kunni}</div>
-                                <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2,letterSpacing:1,textTransform:"uppercase"}}>Kunni</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </ACard>
-
-                {/* Win type */}
-                <ACard title="♠  Win Type Breakdown" accent="#fbbf24">
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
-                    {WIN_TYPES.map(wt=>{
-                      const c=stats.wtC[wt.value]||0,pct=games.length?Math.round((c/games.length)*100):0;
-                      return (
-                        <div key={wt.value}>
-                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-                            <span style={{fontSize:13,fontWeight:600,color:"#fff"}}>{wt.icon} {wt.label}</span>
-                            <span style={{fontSize:12,color:"rgba(255,255,255,.4)"}}>{c} <span style={{color:"#fbbf24",fontFamily:"'Bebas Neue',sans-serif",fontSize:17}}>{pct}%</span></span>
-                          </div>
-                          <div style={{height:5,background:"rgba(255,255,255,.07)",borderRadius:3,overflow:"hidden"}}>
-                            <div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#92400e,#fbbf24)",borderRadius:3,transition:"width .5s"}}/>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </ACard>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* ════ FLOATING RECORD PANEL ════ */}
-      <div className="fab-wrap" ref={panelRef}>
-        {/* Floating Panel */}
-        <div className={`float-panel ${panelOpen?"visible":"hidden"}`}>
-          {/* Panel Header */}
-          <div style={{background:"linear-gradient(135deg,rgba(146,64,14,.5),rgba(251,191,36,.1))",borderBottom:"1px solid rgba(251,191,36,.2)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <div>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:19,letterSpacing:4,color:"#fbbf24",lineHeight:1}}>RECORD GAME</div>
-              <div style={{fontSize:11,color:"rgba(255,255,255,.4)",marginTop:2}}>Game #{games.length+1} · Set {curSet} · {curSG.length}/20</div>
-            </div>
-            <div style={{display:"flex",gap:6}}>
-              <button className="ghost-btn" onClick={undoLast} title="Undo last game" style={{padding:"6px 11px",fontSize:12}}>↩</button>
-              <button className="danger-btn" onClick={()=>setConfirmReset(true)} title="Reset tournament" style={{padding:"6px 11px",fontSize:12}}>⚠</button>
-              <button className="ghost-btn" onClick={()=>setPanelOpen(false)} style={{padding:"6px 11px",fontSize:14,color:"rgba(255,255,255,.5)"}}>✕</button>
-            </div>
-          </div>
-
-          <div className="float-panel-body">
-            {siezed&&(
-              <div className="seized-banner" style={{marginBottom:14}}>
-                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:14,letterSpacing:3,color:"#fbbf24"}}>SET {curSet} SEIZED 🏆</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,.5)",marginTop:2}}>{teamOf(sWinner).name} has clinched this set</div>
-              </div>
-            )}
-
-            {/* Winner */}
-            <FieldLabel>Winner</FieldLabel>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
-              {["A","B"].map(side=>{
-                const tm=teamOf(side),active=form.winner===side;
-                return (
-                  <button key={side} className={`choice${active?" sel-"+side.toLowerCase():""}`} onClick={()=>setWinner(side)} style={{padding:"11px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:18,marginBottom:2}}>{side==="A"?"🔵":"🔴"}</div>
-                    <div style={{fontSize:12,fontWeight:700}}>{tm.name}</div>
-                    <div style={{fontSize:10,opacity:.5,marginTop:1}}>{tm.players.join(" & ")}</div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Win Type */}
-            <FieldLabel>Win Type</FieldLabel>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
-              {WIN_TYPES.map(wt=>{
-                const active=form.winType===wt.value;
-                return (
-                  <button key={wt.value} className={`choice${active?" sel-red":""}`} onClick={()=>setForm(f=>({...f,winType:wt.value}))} style={{padding:"9px 10px",textAlign:"left",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                    <div>
-                      <div style={{fontSize:12,fontWeight:700,marginBottom:1}}><span style={{marginRight:4}}>{wt.icon}</span>{wt.label}</div>
-                      <div style={{fontSize:10,opacity:.4}}>{wt.desc}</div>
-                    </div>
-                    <div style={{background:active?"#ef4444":"rgba(255,255,255,.08)",borderRadius:5,padding:"1px 7px",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,color:active?"#fff":"rgba(255,255,255,.4)",marginLeft:6,flexShrink:0}}>{wt.pts}</div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* MoM — optional */}
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-              <FieldLabel style={{marginBottom:0}}>⭐ MoM <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:12}}>optional · {wTeam.name}</span></FieldLabel>
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:14}}>
-              {wTeam.players.map(p=>(
-                <button key={p} className={`choice${form.mom===p?" sel-gold":""}`} onClick={()=>setForm(f=>({...f,mom:f.mom===p?null:p}))} style={{padding:"9px 6px",textAlign:"center",fontSize:12,fontWeight:700}}>{p}</button>
-              ))}
-              <button className={`choice${form.mom===null?" sel-none":""}`} onClick={()=>setForm(f=>({...f,mom:null}))} style={{padding:"9px 6px",textAlign:"center",fontSize:11,color:"rgba(255,255,255,.4)"}}>None</button>
-            </div>
-
-            {/* Kunni — optional */}
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-              <FieldLabel style={{marginBottom:0}}>💩 Kunni <span style={{color:"rgba(255,255,255,.25)",fontWeight:400,letterSpacing:0,fontSize:12}}>optional · {lTeam.name}</span></FieldLabel>
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginBottom:18}}>
-              {lTeam.players.map(p=>(
-                <button key={p} className={`choice${form.kunni===p?" sel-red":""}`} onClick={()=>setForm(f=>({...f,kunni:f.kunni===p?null:p}))} style={{padding:"9px 6px",textAlign:"center",fontSize:12,fontWeight:700}}>{p}</button>
-              ))}
-              <button className={`choice${form.kunni===null?" sel-none":""}`} onClick={()=>setForm(f=>({...f,kunni:null}))} style={{padding:"9px 6px",textAlign:"center",fontSize:11,color:"rgba(255,255,255,.4)"}}>None</button>
-            </div>
-
-            <button className="rec-btn" onClick={tryRecord} disabled={siezed&&curSG.length>=GPSet} style={{fontSize:19,letterSpacing:4,padding:"14px"}}>
-              RECORD GAME
-            </button>
-
-            {/* Quick ref */}
-            <div style={{marginTop:12,padding:"10px 12px",background:"rgba(255,255,255,.03)",borderRadius:10,border:"1px solid rgba(255,255,255,.05)"}}>
-              {WIN_TYPES.map(wt=>(
-                <div key={wt.value} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"3px 0",borderBottom:"1px solid rgba(255,255,255,.04)"}}>
-                  <span style={{fontSize:11,color:"rgba(255,255,255,.45)"}}>{wt.icon} {wt.label}</span>
-                  <span style={{fontSize:11,fontWeight:700,color:"#fbbf24"}}>+{wt.pts}pt{wt.pts>1?"s":""}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* FAB Button */}
-        <button className="fab-btn" onClick={()=>setPanelOpen(o=>!o)}>
-          <span className="fab-label">{panelOpen?"Close Panel":"Record Game"}</span>
-          {panelOpen?"✕":"🃏"}
-          <span className="fab-badge">{curSG.length}</span>
-        </button>
-      </div>
-
-      {/* CONFIRM GAME MODAL */}
-      {confirmGame&&(()=>{
-        const wt=getWT(form.winType);
-        return (
-          <div className="modal-bg">
-            <div style={{background:"#0d0d0d",border:"1px solid rgba(251,191,36,.4)",borderRadius:18,padding:"28px 26px 22px",maxWidth:380,width:"100%",boxShadow:"0 0 60px rgba(251,191,36,.15)"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,letterSpacing:5,color:"#fbbf24",textAlign:"center",marginBottom:4}}>CONFIRM?</div>
-              <div style={{fontSize:12,color:"rgba(255,255,255,.35)",textAlign:"center",marginBottom:20}}>Review before recording</div>
-              <div style={{background:"rgba(255,255,255,.04)",borderRadius:12,padding:"14px 16px",marginBottom:20,border:"1px solid rgba(255,255,255,.07)"}}>
-                {[
-                  ["Game",     `#${games.length+1}  ·  Set ${curSet}`],
-                  ["Winner",   `${form.winner==="A"?"🔵":"🔴"}  ${wTeam.name}  (${wTeam.players.join(" & ")})`],
-                  ["Win Type", `${wt?.icon}  ${wt?.label}  (+${wt?.pts}pt)`],
-                  ["⭐ MoM",   form.mom||"—  (not awarded)"],
-                  ["💩 Kunni", form.kunni||"—  (not awarded)"],
-                ].map(([lbl,val])=>(
-                  <div key={lbl} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,.05)"}}>
-                    <span style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:"rgba(255,255,255,.35)",textTransform:"uppercase"}}>{lbl}</span>
-                    <span style={{fontSize:14,fontWeight:700,color:lbl.includes("MoM")&&!form.mom?"rgba(255,255,255,.3)":lbl.includes("Kunni")&&!form.kunni?"rgba(255,255,255,.3)":"#fff",textAlign:"right",fontStyle:(!form.mom&&lbl.includes("MoM"))||(!form.kunni&&lbl.includes("Kunni"))?"italic":"normal"}}>{val}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{display:"flex",gap:10}}>
-                <button className="rec-btn" onClick={doRecord} style={{fontSize:18,letterSpacing:3,padding:"13px"}}>CONFIRM ✓</button>
-                <button className="ghost-btn" onClick={()=>setConfirmGame(false)} style={{padding:"13px 20px"}}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* RESET MODAL */}
-      {confirmReset&&(
-        <div className="modal-bg">
-          <div style={{background:"#0d0d0d",border:"1px solid rgba(239,68,68,.4)",borderRadius:18,padding:"28px 26px 22px",maxWidth:320,width:"100%",textAlign:"center"}}>
-            <div style={{fontSize:40,marginBottom:12}}>⚠️</div>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:3,color:"#fff",marginBottom:8}}>RESET TOURNAMENT?</div>
-            <div style={{fontSize:13,color:"rgba(255,255,255,.4)",marginBottom:22,lineHeight:1.6}}>All game records will be permanently erased.</div>
-            <div style={{display:"flex",gap:10,justifyContent:"center"}}>
-              <button className="rec-btn" onClick={doReset} style={{background:"linear-gradient(135deg,#7f1d1d,#ef4444)",boxShadow:"0 4px 20px rgba(239,68,68,.3)",fontSize:16,letterSpacing:2,padding:"12px 24px",color:"#fff"}}>Yes, Reset</button>
-              <button className="ghost-btn" onClick={()=>setConfirmReset(false)} style={{padding:"12px 22px"}}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  if (loading) return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 20
+    }
+  }, "Loading\u2026");
+  const gap = Math.abs(curInfo.aScore - curInfo.bScore);
+  const leadingNow = curInfo.aScore >= curInfo.bScore ? "A" : "B";
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      paddingBottom: 100
+    }
+  }, toast && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      top: 16,
+      left: "50%",
+      transform: "translateX(-50%)",
+      zIndex: 99999,
+      background: toast.type === "ok" ? "#14532d" : toast.type === "err" ? "#450a0a" : toast.type === "seized" ? "#1c1000" : "#1e3a5f",
+      border: `1px solid ${toast.type === "ok" ? "#22c55e" : toast.type === "err" ? "#ef4444" : toast.type === "seized" ? "#fbbf24" : "#3b82f6"}`,
+      color: "var(--c1)",
+      padding: "13px 22px",
+      borderRadius: 10,
+      fontSize: 14,
+      fontWeight: 600,
+      boxShadow: "0 8px 32px rgba(0,0,0,.8)",
+      maxWidth: 380,
+      textAlign: "center",
+      lineHeight: 1.5
+    }
+  }, toast.msg), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "linear-gradient(180deg,rgba(5,5,15,0.98) 0%,rgba(0,0,0,0.97) 100%)",
+      borderBottom: "1px solid rgba(251,191,36,0.25)",
+      padding: "40px 24px 30px",
+      textAlign: "center",
+      position: "relative",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hero-stripe"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "hero-num hero-num-l"
+  }, "A"), /*#__PURE__*/React.createElement("div", {
+    className: "hero-num hero-num-r"
+  }, "B"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: 200,
+      height: 200,
+      background: "radial-gradient(circle at 0 0,rgba(59,130,246,0.08),transparent 70%)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: 200,
+      height: 200,
+      background: "radial-gradient(circle at 100% 0,rgba(239,68,68,0.08),transparent 70%)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 3,
+      background: "linear-gradient(90deg,#3b82f6,#fbbf24,#ef4444)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 1,
+      background: "linear-gradient(90deg,transparent,rgba(251,191,36,0.3),transparent)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      top: 16,
+      right: 20,
+      zIndex: 10,
+      display: "flex",
+      gap: 8,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "theme-toggle",
+    style: {
+      position: "static"
+    },
+    onClick: toggleTheme
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14
+    }
+  }, theme === 'dark' ? '🌙' : '☀️'), /*#__PURE__*/React.createElement("div", {
+    className: "toggle-track"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "toggle-knob"
+  })), /*#__PURE__*/React.createElement("span", null, theme === 'dark' ? 'Dark' : 'Light')), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSettings(true),
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      background: "rgba(0,0,0,.35)",
+      border: "1px solid rgba(255,255,255,.15)",
+      borderRadius: 20,
+      padding: "6px 14px 6px 10px",
+      cursor: "pointer",
+      fontSize: 12,
+      fontWeight: 700,
+      fontFamily: "inherit",
+      color: "rgba(255,255,255,.55)",
+      backdropFilter: "blur(4px)",
+      letterSpacing: .5,
+      transition: "all .2s"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14
+    }
+  }, "\u2699\uFE0F"), /*#__PURE__*/React.createElement("span", null, "Settings")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowGuide(true),
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      background: "rgba(0,0,0,.35)",
+      border: "1px solid rgba(255,255,255,.15)",
+      borderRadius: 20,
+      padding: "6px 14px 6px 10px",
+      cursor: "pointer",
+      fontSize: 12,
+      fontWeight: 700,
+      fontFamily: "inherit",
+      color: "rgba(255,255,255,.55)",
+      backdropFilter: "blur(4px)",
+      letterSpacing: .5,
+      transition: "all .2s"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14
+    }
+  }, "\uD83D\uDCD6"), /*#__PURE__*/React.createElement("span", null, "Guide"))), /*#__PURE__*/React.createElement("div", {
+    className: "live-pill"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "live-dot"
+  }), /*#__PURE__*/React.createElement("span", null, "LIVE MATCH")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 9,
+      letterSpacing: 8,
+      color: "rgba(251,191,36,0.6)",
+      fontWeight: 800,
+      textTransform: "uppercase",
+      marginBottom: 14
+    }
+  }, "PEERA CLUB  \xB7  QUARTERLY TOURNAMENT"), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: "clamp(52px,9vw,96px)",
+      letterSpacing: 10,
+      lineHeight: .9,
+      color: "#fff",
+      textShadow: "0 0 80px rgba(251,191,36,0.35),0 2px 0 rgba(0,0,0,.8)"
+    }
+  }, "Maidaan-e-Rung"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 16,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 1,
+      flex: 1,
+      maxWidth: 90,
+      background: "linear-gradient(90deg,transparent,rgba(59,130,246,.5))"
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: "'Rajdhani',sans-serif",
+      fontSize: 16,
+      color: "rgba(255,255,255,.3)",
+      letterSpacing: 5,
+      fontWeight: 600
+    }
+  }, "\u0645\u06CC\u062F\u0627\u0646\u0650 \u0631\u0646\u06AF"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 1,
+      flex: 1,
+      maxWidth: 90,
+      background: "linear-gradient(90deg,rgba(239,68,68,.5),transparent)"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 24,
+      marginTop: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 18,
+      fontWeight: 800,
+      color: "#60a5fa"
+    }
+  }, games.length), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9,
+      color: "rgba(255,255,255,.65)",
+      letterSpacing: 2,
+      fontWeight: 600,
+      textTransform: "uppercase"
+    }
+  }, "Games")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 1,
+      background: "rgba(255,255,255,.1)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 18,
+      fontWeight: 800,
+      color: "#fbbf24"
+    }
+  }, sets.filter(s => s.done || s.seized).length), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9,
+      color: "rgba(255,255,255,.65)",
+      letterSpacing: 2,
+      fontWeight: 600,
+      textTransform: "uppercase"
+    }
+  }, "Sets Done")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 1,
+      background: "rgba(255,255,255,.1)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 18,
+      fontWeight: 800,
+      color: "#f87171"
+    }
+  }, sets.filter(s => s.winner === "A").length, "-", sets.filter(s => s.winner === "B").length), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9,
+      color: "rgba(255,255,255,.65)",
+      letterSpacing: 2,
+      fontWeight: 600,
+      textTransform: "uppercase"
+    }
+  }, "Set Score"))), kings && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "inline-flex",
+      gap: 16,
+      alignItems: "center",
+      marginTop: 18,
+      background: "rgba(251,191,36,0.1)",
+      border: "1px solid rgba(251,191,36,0.4)",
+      borderRadius: 100,
+      padding: "11px 28px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: "#fef3c7"
+    }
+  }, "\uD83D\uDC51 ", teamOf(kings).players.join(" & "), " \u2014 ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#fbbf24"
+    }
+  }, "KINGS")), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--c5)"
+    }
+  }, "|"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      fontWeight: 600,
+      color: "var(--c3)"
+    }
+  }, "\uD83E\uDDDF ", otherTeam(kings).players.join(" & "), " \u2014 GHULAMS"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 960,
+      margin: "0 auto",
+      padding: "20px 16px 20px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14,
+      borderRadius: 18,
+      overflow: "hidden",
+      border: "1px solid var(--card-b)",
+      background: "var(--card)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr auto 1fr",
+      minHeight: 220
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "28px 20px 20px",
+      position: "relative",
+      background: `linear-gradient(135deg, rgba(59,130,246,0.08) 0%, transparent 60%)`,
+      borderRight: "1px solid var(--sep)"
+    }
+  }, kings === "A" && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      top: 12,
+      right: 14,
+      fontSize: 36,
+      filter: "drop-shadow(0 0 10px rgba(251,191,36,.9))",
+      lineHeight: 1
+    }
+  }, "\uD83D\uDC51"), kings === "B" && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      top: 12,
+      right: 14,
+      fontSize: 36,
+      filter: "drop-shadow(0 0 10px rgba(239,68,68,.6))",
+      lineHeight: 1
+    }
+  }, "\uD83E\uDDDF"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 9,
+      fontWeight: 800,
+      letterSpacing: 5,
+      color: "#93c5fd",
+      textTransform: "uppercase",
+      marginBottom: 4,
+      opacity: .85
+    }
+  }, "TEAM A"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Rajdhani',sans-serif",
+      fontSize: 18,
+      fontWeight: 700,
+      color: "var(--c2)",
+      marginBottom: 16,
+      letterSpacing: 1
+    }
+  }, TEAM_A.players.join(" & ")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: "clamp(90px,14vw,140px)",
+      lineHeight: .9,
+      color: "#3b82f6",
+      letterSpacing: 2,
+      textShadow: "0 0 80px rgba(59,130,246,.6),0 0 30px rgba(59,130,246,.3)"
+    }
+  }, curInfo.aScore), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 8,
+      color: "rgba(255,255,255,.6)",
+      fontWeight: 700,
+      marginTop: 6,
+      marginBottom: 16,
+      letterSpacing: 3,
+      textTransform: "uppercase"
+    }
+  }, "PTS THIS SET"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 7
+    }
+  }, sets.map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.n,
+    style: {
+      width: 32,
+      height: 32,
+      borderRadius: 9,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: s.winner === "A" ? "#3b82f6" : s.winner && s.winner !== "A" ? "rgba(239,68,68,.1)" : "var(--stat-bg)",
+      border: `1.5px solid ${s.winner === "A" ? "#3b82f6" : s.winner && s.winner !== "A" ? "rgba(239,68,68,.3)" : "var(--sep)"}`,
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 10,
+      fontWeight: 800,
+      color: s.winner === "A" ? "#fff" : s.winner && s.winner !== "A" ? "#f87171" : "var(--c4)"
+    }
+  }, s.winner === "A" ? "W" : s.winner && s.winner !== "A" ? "L" : s.n)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "20px 16px",
+      gap: 10,
+      minWidth: 90,
+      borderLeft: "1px solid var(--sep)",
+      borderRight: "1px solid var(--sep)",
+      background: "var(--ghost)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 8,
+      fontWeight: 800,
+      letterSpacing: 3,
+      color: "var(--c4)",
+      textTransform: "uppercase"
+    }
+  }, "SET ", curSet), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 26,
+      fontWeight: 900,
+      color: "#fbbf24",
+      letterSpacing: 6,
+      lineHeight: 1,
+      textShadow: "0 0 24px rgba(251,191,36,.6)"
+    }
+  }, "VS"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 13,
+      fontWeight: 800,
+      color: "var(--c3)"
+    }
+  }, curSG.length, /*#__PURE__*/React.createElement("span", {
+    style: {
+      opacity: .4,
+      fontSize: 10
+    }
+  }, "/", gamesPerSet)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 50,
+      height: 4,
+      background: "var(--bar)",
+      borderRadius: 2,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: `${curSG.length / gamesPerSet * 100}%`,
+      height: "100%",
+      background: "linear-gradient(90deg,#fbbf24,#f59e0b)",
+      borderRadius: 2,
+      transition: "width .4s"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9,
+      color: "var(--c5)",
+      letterSpacing: 1
+    }
+  }, "GAMES"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "28px 20px 20px",
+      position: "relative",
+      background: `linear-gradient(225deg, rgba(239,68,68,0.08) 0%, transparent 60%)`,
+      textAlign: "right"
+    }
+  }, kings === "B" && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      top: 12,
+      left: 14,
+      fontSize: 36,
+      filter: "drop-shadow(0 0 10px rgba(251,191,36,.9))",
+      lineHeight: 1
+    }
+  }, "\uD83D\uDC51"), kings === "A" && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      top: 12,
+      left: 14,
+      fontSize: 36,
+      filter: "drop-shadow(0 0 10px rgba(239,68,68,.6))",
+      lineHeight: 1
+    }
+  }, "\uD83E\uDDDF"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 9,
+      fontWeight: 800,
+      letterSpacing: 5,
+      color: "#fca5a5",
+      textTransform: "uppercase",
+      marginBottom: 4,
+      opacity: .85
+    }
+  }, "TEAM B"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Rajdhani',sans-serif",
+      fontSize: 18,
+      fontWeight: 700,
+      color: "var(--c2)",
+      marginBottom: 16,
+      letterSpacing: 1
+    }
+  }, TEAM_B.players.join(" & ")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: "clamp(90px,14vw,140px)",
+      lineHeight: .9,
+      color: "#ef4444",
+      letterSpacing: 2,
+      textShadow: "0 0 80px rgba(239,68,68,.6),0 0 30px rgba(239,68,68,.3)"
+    }
+  }, curInfo.bScore), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 8,
+      color: "rgba(255,255,255,.6)",
+      fontWeight: 700,
+      marginTop: 6,
+      marginBottom: 16,
+      letterSpacing: 3,
+      textTransform: "uppercase"
+    }
+  }, "PTS THIS SET"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 7,
+      justifyContent: "flex-end"
+    }
+  }, sets.map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.n,
+    style: {
+      width: 32,
+      height: 32,
+      borderRadius: 9,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: s.winner === "B" ? "#ef4444" : s.winner && s.winner !== "B" ? "rgba(239,68,68,.1)" : "var(--stat-bg)",
+      border: `1.5px solid ${s.winner === "B" ? "#ef4444" : s.winner && s.winner !== "B" ? "rgba(239,68,68,.3)" : "var(--sep)"}`,
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 10,
+      fontWeight: 800,
+      color: s.winner === "B" ? "#fff" : s.winner && s.winner !== "B" ? "#f87171" : "var(--c4)"
+    }
+  }, s.winner === "B" ? "W" : s.winner && s.winner !== "B" ? "L" : s.n))))), !siezed && curSG.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "1px solid var(--sep)",
+      padding: "10px 20px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      background: "var(--ghost)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--c4)",
+      fontWeight: 500
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(251,191,36,.5)"
+    }
+  }, "\u25CF"), " ", remaining, " games left \xB7 max ", remaining * MAX_PTS, " pts available"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--c4)",
+      fontWeight: 500
+    }
+  }, "Lead: ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: leadingNow === "A" ? TEAM_A.light : TEAM_B.light,
+      fontWeight: 700
+    }
+  }, gap, " pts \u2014 ", teamOf(leadingNow).name))), siezed && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "1px solid rgba(251,191,36,.3)",
+      padding: "16px 20px",
+      background: "var(--log-head)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 26
+    }
+  }, "\uD83C\uDFC6"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 18,
+      letterSpacing: 3,
+      color: "#fbbf24"
+    }
+  }, "SET ", curSet, " SEIZED \u2014 ", teamOf(sWinner).name.toUpperCase(), " WINS"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--c3)",
+      marginTop: 2
+    }
+  }, "Other team cannot catch up even with max points remaining")), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 26
+    }
+  }, "\uD83C\uDFC6"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3,1fr)",
+      gap: 8,
+      marginBottom: 18
+    }
+  }, sets.map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.n,
+    className: "card",
+    style: {
+      padding: "12px 14px",
+      borderColor: s.n === curSet ? "rgba(251,191,36,.4)" : "rgba(255,255,255,.07)",
+      background: s.n === curSet ? "rgba(251,191,36,.06)" : "rgba(13,13,13,.97)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 9,
+      fontWeight: 800,
+      letterSpacing: 3,
+      color: "var(--c4)",
+      textTransform: "uppercase"
+    }
+  }, "Set ", s.n), s.seized && !s.done && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 9,
+      fontWeight: 700,
+      background: "rgba(251,191,36,.2)",
+      color: "#fbbf24",
+      borderRadius: 4,
+      padding: "1px 6px",
+      letterSpacing: 1
+    }
+  }, "SEIZED"), s.done && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 9,
+      fontWeight: 700,
+      background: "rgba(34,197,94,.2)",
+      color: "#86efac",
+      borderRadius: 4,
+      padding: "1px 6px",
+      letterSpacing: 1
+    }
+  }, "DONE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 28,
+      color: "#60a5fa",
+      letterSpacing: 2
+    }
+  }, s.aScore), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,.15)",
+      fontSize: 14
+    }
+  }, "\u2014"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 28,
+      color: "#f87171",
+      letterSpacing: 2
+    }
+  }, s.bScore)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "var(--c5)"
+    }
+  }, s.played, "/", gamesPerSet), s.winner && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      fontWeight: 700,
+      color: s.winner === "A" ? "#93c5fd" : "#fca5a5"
+    }
+  }, s.winner === "A" ? "🔵 A" : "🔴 B", " Wins")))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      left: 0,
+      top: "50%",
+      transform: "translateY(-50%)",
+      zIndex: 200,
+      display: "flex",
+      flexDirection: "column",
+      gap: 6,
+      padding: "10px 0",
+      background: "rgba(0,0,0,.7)",
+      backdropFilter: "blur(12px)",
+      borderRight: "1px solid rgba(255,255,255,.1)",
+      borderRadius: "0 14px 14px 0",
+      boxShadow: "4px 0 24px rgba(0,0,0,.5)"
+    }
+  }, [{
+    id: "log",
+    icon: "📜",
+    label: "Log"
+  }, {
+    id: "analytics",
+    icon: "📊",
+    label: "Stats"
+  }, {
+    id: "rankings",
+    icon: "🏅",
+    label: "Ranks"
+  }].map(_ref3 => {
+    let {
+      id,
+      icon,
+      label
+    } = _ref3;
+    return /*#__PURE__*/React.createElement("button", {
+      key: id,
+      onClick: () => setNavPanel(navPanel === id ? null : id),
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 3,
+        padding: "12px 14px",
+        background: navPanel === id ? "rgba(251,191,36,.18)" : "transparent",
+        border: "none",
+        borderLeft: navPanel === id ? "3px solid #fbbf24" : "3px solid transparent",
+        cursor: "pointer",
+        transition: "all .2s",
+        minWidth: 58
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 20
+      }
+    }, icon), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontFamily: "'Orbitron',sans-serif",
+        fontSize: 7,
+        fontWeight: 800,
+        letterSpacing: 1,
+        color: navPanel === id ? "#fbbf24" : "rgba(255,255,255,.45)",
+        textTransform: "uppercase"
+      }
+    }, label));
+  })), navPanel && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      zIndex: 300,
+      display: "flex"
+    },
+    onClick: () => setNavPanel(null)
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      inset: 0,
+      background: "rgba(0,0,0,.6)",
+      backdropFilter: "blur(3px)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    onClick: e => e.stopPropagation(),
+    style: {
+      position: "relative",
+      width: "min(520px,92vw)",
+      height: "100%",
+      background: "var(--modal)",
+      borderRight: "1px solid var(--card-b)",
+      display: "flex",
+      flexDirection: "column",
+      boxShadow: "8px 0 40px rgba(0,0,0,.8)",
+      animation: "slideInLeft .25s ease-out"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--panel-hdr)",
+      borderBottom: "1px solid rgba(251,191,36,.2)",
+      padding: "16px 20px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 20,
+      letterSpacing: 3,
+      color: "#fbbf24"
+    }
+  }, navPanel === "log" && "📜  GAME LOG", navPanel === "analytics" && "📊  ANALYTICS", navPanel === "rankings" && "🏅  PLAYER RANKINGS"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      alignItems: "center"
+    }
+  }, navPanel === "log" && games.length > 0 && /*#__PURE__*/React.createElement("button", {
+    className: "print-btn",
+    onClick: printLog
+  }, "\uD83D\uDDA8 PDF"), navPanel === "analytics" && games.length > 0 && /*#__PURE__*/React.createElement("button", {
+    className: "print-btn",
+    onClick: printAnalytics
+  }, "\uD83D\uDDA8 PDF"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setNavPanel(null),
+    style: {
+      background: "none",
+      border: "none",
+      color: "var(--c3)",
+      fontSize: 22,
+      cursor: "pointer",
+      lineHeight: 1,
+      padding: "0 4px"
+    }
+  }, "\u2715"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: "auto",
+      padding: "16px 18px"
+    }
+  }, navPanel === "log" && (!games.length ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "60px 20px",
+      color: "var(--c5)",
+      fontSize: 15,
+      fontStyle: "italic"
+    }
+  }, "No games recorded yet.") : /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      background: "var(--log-head)"
+    }
+  }, ["#", "Set", "Winner", "Win Type", "Pts", "⭐", "💩", "Date", "Time", "📍"].map(h => /*#__PURE__*/React.createElement("th", {
+    key: h,
+    style: {
+      padding: "10px 10px",
+      textAlign: "left",
+      fontSize: 9,
+      fontWeight: 700,
+      color: "var(--c3)",
+      textTransform: "uppercase",
+      letterSpacing: 1.5,
+      borderBottom: "1px solid var(--sep)",
+      whiteSpace: "nowrap"
+    }
+  }, h)))), /*#__PURE__*/React.createElement("tbody", null, [...games].reverse().map((g, i) => {
+    const wt = getWT(g.winType),
+      isA = g.winner === "A";
+    return /*#__PURE__*/React.createElement("tr", {
+      key: g.id,
+      style: {
+        borderBottom: "1px solid var(--sep2)",
+        background: i % 2 ? "var(--row)" : "transparent"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 11,
+        fontWeight: 600,
+        color: "var(--c4)"
+      }
+    }, g.gameNumber), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 11,
+        color: "var(--c4)"
+      }
+    }, "S", g.set), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: isA ? "#93c5fd" : "#fca5a5"
+      }
+    }, isA ? "🔵 A" : "🔴 B")), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        fontWeight: 600
+      }
+    }, wt === null || wt === void 0 ? void 0 : wt.icon, " ", wt === null || wt === void 0 ? void 0 : wt.label)), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 18,
+        color: "#fbbf24"
+      }
+    }, wt === null || wt === void 0 ? void 0 : wt.pts), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 11,
+        color: g.mom ? "#fde047" : "rgba(255,255,255,.2)"
+      }
+    }, g.mom || "—"), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 11,
+        color: g.kunni ? "#f87171" : "rgba(255,255,255,.2)"
+      }
+    }, g.kunni || "—"), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 10,
+        color: "var(--c4)",
+        whiteSpace: "nowrap"
+      }
+    }, g.date || new Date(g.ts).toLocaleDateString("en-PK", {
+      day: "2-digit",
+      month: "short"
+    })), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 10,
+        color: "var(--c5)",
+        whiteSpace: "nowrap"
+      }
+    }, g.time || new Date(g.ts).toLocaleTimeString("en-PK", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "9px 10px",
+        fontSize: 10,
+        color: g.location ? "#a78bfa" : "rgba(255,255,255,.18)"
+      }
+    }, g.location || "—"));
+  }))))), navPanel === "analytics" && (!games.length ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "60px 20px",
+      color: "var(--c5)",
+      fontSize: 15,
+      fontStyle: "italic"
+    }
+  }, "No data yet.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(ACard, {
+    title: "\u2B50 Man of the Match",
+    accent: "#fde047"
+  }, !stats.momList.length ? /*#__PURE__*/React.createElement(NoData, {
+    msg: "No MoM yet"
+  }) : stats.momList.map((_ref4, i) => {
+    let [n, c] = _ref4;
+    return /*#__PURE__*/React.createElement(StatBar, {
+      key: n,
+      name: n,
+      count: c,
+      max: stats.momList[0][1],
+      color: "#fde047",
+      rank: i + 1
+    });
+  })), /*#__PURE__*/React.createElement(ACard, {
+    title: "\uD83D\uDCA9 Kunni Shame",
+    accent: "#f87171"
+  }, !stats.kunniList.length ? /*#__PURE__*/React.createElement(NoData, {
+    msg: "No Kunni yet"
+  }) : stats.kunniList.map((_ref5, i) => {
+    let [n, c] = _ref5;
+    return /*#__PURE__*/React.createElement(StatBar, {
+      key: n,
+      name: n,
+      count: c,
+      max: stats.kunniList[0][1],
+      color: "#f87171",
+      rank: i + 1
+    });
+  }))), /*#__PURE__*/React.createElement(ACard, {
+    title: "\uD83D\uDC64  Player Breakdown",
+    accent: "#a78bfa"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10
+    }
+  }, [...TEAM_A.players, ...TEAM_B.players].map(p => {
+    const isA = TEAM_A.players.includes(p),
+      tm = isA ? TEAM_A : TEAM_B;
+    const ps = stats.playerStats[p] || {
+      wins: 0,
+      mom: 0,
+      kunni: 0
+    };
+    return /*#__PURE__*/React.createElement("div", {
+      key: p,
+      style: {
+        background: "var(--choice)",
+        border: `1px solid ${tm.color}25`,
+        borderRadius: 12,
+        padding: "12px 14px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 700,
+        color: "var(--c1)",
+        marginBottom: 2
+      }
+    }, isA ? "🔵" : "🔴", " ", p), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: "var(--c4)",
+        marginBottom: 8
+      }
+    }, tm.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "grid",
+        gridTemplateColumns: "repeat(3,1fr)",
+        gap: 5,
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "var(--stat-bg)",
+        borderRadius: 7,
+        padding: "5px 3px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 20,
+        color: tm.light,
+        lineHeight: 1
+      }
+    }, ps.wins), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 8,
+        color: "var(--c4)",
+        letterSpacing: 1,
+        textTransform: "uppercase"
+      }
+    }, "Wins")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "rgba(251,191,36,.08)",
+        borderRadius: 7,
+        padding: "5px 3px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 20,
+        color: "#fde047",
+        lineHeight: 1
+      }
+    }, ps.mom), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 8,
+        color: "var(--c4)",
+        letterSpacing: 1,
+        textTransform: "uppercase"
+      }
+    }, "MoM")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "rgba(239,68,68,.08)",
+        borderRadius: 7,
+        padding: "5px 3px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 20,
+        color: "#f87171",
+        lineHeight: 1
+      }
+    }, ps.kunni), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 8,
+        color: "var(--c4)",
+        letterSpacing: 1,
+        textTransform: "uppercase"
+      }
+    }, "Kunni"))));
+  }))), /*#__PURE__*/React.createElement(ACard, {
+    title: "\u2660  Win Type Breakdown",
+    accent: "#fbbf24"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 12
+    }
+  }, WIN_TYPES.map(wt => {
+    const c = stats.wtC[wt.value] || 0,
+      pct = games.length ? Math.round(c / games.length * 100) : 0;
+    return /*#__PURE__*/React.createElement("div", {
+      key: wt.value
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 5
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 600,
+        color: "var(--c1)"
+      }
+    }, wt.icon, " ", wt.label), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: "var(--c3)"
+      }
+    }, c, " ", /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#fbbf24",
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 15
+      }
+    }, pct, "%"))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 4,
+        background: "var(--bar)",
+        borderRadius: 3,
+        overflow: "hidden"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: `${pct}%`,
+        height: "100%",
+        background: "linear-gradient(90deg,#92400e,#fbbf24)",
+        borderRadius: 3
+      }
+    })));
+  }))))), navPanel === "rankings" && (!games.length ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "60px 20px",
+      color: "var(--c5)",
+      fontSize: 15,
+      fontStyle: "italic"
+    }
+  }, "No data yet.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(ACard, {
+    title: "\uD83C\uDFC6  Overall Tournament Rankings",
+    accent: "#fbbf24"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 6,
+      fontSize: 11,
+      color: "var(--c4)",
+      lineHeight: 1.6
+    }
+  }, "Consolidated across all sets played so far."), /*#__PURE__*/React.createElement("div", {
+    className: "rankings-grid",
+    style: {
+      marginTop: 12
+    }
+  }, stats.overallRanking.grandMaster && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-gm"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83C\uDFC6"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Grand Master"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, stats.overallRanking.grandMaster), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, stats.mom[stats.overallRanking.grandMaster] || 0, " MoM total")), stats.overallRanking.expert && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-exp"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83E\uDD48"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Expert"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, stats.overallRanking.expert), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, stats.mom[stats.overallRanking.expert] || 0, " MoM total")), stats.overallRanking.amateur && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-am"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83C\uDFAF"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Amateur"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, stats.overallRanking.amateur), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, "fair performance")), stats.overallRanking.chootya && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-ch"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83D\uDCA9"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Chootya"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, stats.overallRanking.chootya), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, stats.kunni[stats.overallRanking.chootya] || 0, " kunni total")))), stats.setRankings.length > 0 && stats.setRankings.map(sr => /*#__PURE__*/React.createElement(ACard, {
+    key: sr.n,
+    title: `Set ${sr.n} Rankings`,
+    accent: "#a78bfa"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rankings-grid",
+    style: {
+      marginTop: 4
+    }
+  }, sr.grandMaster && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-gm"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83C\uDFC6"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Grand Master"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, sr.grandMaster), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, sr.momStats[sr.grandMaster] || 0, " MoM")), sr.expert && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-exp"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83E\uDD48"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Expert"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, sr.expert), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, sr.momStats[sr.expert] || 0, " MoM")), sr.amateur && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-am"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83C\uDFAF"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Amateur"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, sr.amateur), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, "fair performance")), sr.chootya && /*#__PURE__*/React.createElement("div", {
+    className: "rank-card rank-ch"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rank-icon"
+  }, "\uD83D\uDCA9"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-label"
+  }, "Chootya"), /*#__PURE__*/React.createElement("div", {
+    className: "rank-name"
+  }, sr.chootya), /*#__PURE__*/React.createElement("div", {
+    className: "rank-stat"
+  }, sr.kunniStats[sr.chootya] || 0, " kunni")))))))))), setWinMsg && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      zIndex: 9999,
+      pointerEvents: "none",
+      overflow: "hidden"
+    }
+  }, confetti.map(p => /*#__PURE__*/React.createElement("div", {
+    key: p.id,
+    style: {
+      position: "absolute",
+      left: `${p.x}%`,
+      top: "-20px",
+      width: p.size,
+      height: p.size * 0.6,
+      background: p.color,
+      borderRadius: 2,
+      animation: `confettiFall ${p.dur}s ${p.delay}s ease-in forwards`,
+      transform: `rotate(${p.rotate}deg)`
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%,-50%)",
+      background: `linear-gradient(135deg,rgba(0,0,0,.95),rgba(20,20,20,.98))`,
+      border: `2px solid ${setWinMsg.color}`,
+      borderRadius: 24,
+      padding: "40px 52px",
+      textAlign: "center",
+      boxShadow: `0 0 80px ${setWinMsg.glow},0 20px 60px rgba(0,0,0,.8)`,
+      animation: "popIn .35s cubic-bezier(.34,1.56,.64,1)",
+      pointerEvents: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 56,
+      marginBottom: 12,
+      lineHeight: 1
+    }
+  }, "\uD83C\uDFC6"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 10,
+      fontWeight: 800,
+      letterSpacing: 4,
+      color: setWinMsg.color,
+      marginBottom: 6,
+      textTransform: "uppercase"
+    }
+  }, "Set Seized!"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: "clamp(36px,6vw,56px)",
+      letterSpacing: 6,
+      color: "#fff",
+      lineHeight: 1,
+      textShadow: `0 0 40px ${setWinMsg.glow}`
+    }
+  }, setWinMsg.teamName), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Rajdhani',sans-serif",
+      fontSize: 16,
+      color: "rgba(255,255,255,.6)",
+      marginTop: 6,
+      fontWeight: 600
+    }
+  }, setWinMsg.players.join(" & ")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 11,
+      color: setWinMsg.color,
+      marginTop: 14,
+      fontWeight: 700,
+      letterSpacing: 2
+    }
+  }, "WINS THE SET"))), /*#__PURE__*/React.createElement("div", {
+    className: "fab-wrap",
+    ref: panelRef
+  }, /*#__PURE__*/React.createElement("div", {
+    className: `float-panel ${panelOpen ? "visible" : "hidden"}`
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--panel-hdr)",
+      borderBottom: "1px solid rgba(251,191,36,.2)",
+      padding: "14px 18px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 19,
+      letterSpacing: 4,
+      color: "#fbbf24",
+      lineHeight: 1
+    }
+  }, "RECORD GAME"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--c3)",
+      marginTop: 2
+    }
+  }, "Game #", games.length + 1, " \xB7 Set ", curSet, " \xB7 ", curSG.length, "/20")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ghost-btn",
+    onClick: undoLast,
+    title: "Undo last game",
+    style: {
+      padding: "6px 11px",
+      fontSize: 12
+    }
+  }, "\u21A9"), /*#__PURE__*/React.createElement("button", {
+    className: "danger-btn",
+    onClick: () => setConfirmReset(true),
+    title: "Reset tournament",
+    style: {
+      padding: "6px 11px",
+      fontSize: 12
+    }
+  }, "\u26A0"), /*#__PURE__*/React.createElement("button", {
+    className: "ghost-btn",
+    onClick: () => setPanelOpen(false),
+    style: {
+      padding: "6px 11px",
+      fontSize: 14,
+      color: "var(--c3)"
+    }
+  }, "\u2715"))), /*#__PURE__*/React.createElement("div", {
+    className: "float-panel-body"
+  }, siezed && /*#__PURE__*/React.createElement("div", {
+    className: "seized-banner",
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 14,
+      letterSpacing: 3,
+      color: "#fbbf24"
+    }
+  }, "SET ", curSet, " SEIZED \uD83C\uDFC6"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--c3)",
+      marginTop: 2
+    }
+  }, teamOf(sWinner).name, " has clinched this set")), /*#__PURE__*/React.createElement(FieldLabel, null, "Winner"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8,
+      marginBottom: 14
+    }
+  }, ["A", "B"].map(side => {
+    const tm = teamOf(side),
+      active = form.winner === side;
+    return /*#__PURE__*/React.createElement("button", {
+      key: side,
+      className: `choice${active ? " sel-" + side.toLowerCase() : ""}`,
+      onClick: () => setWinner(side),
+      style: {
+        padding: "11px 8px",
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 18,
+        marginBottom: 2
+      }
+    }, side === "A" ? "🔵" : "🔴"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700
+      }
+    }, tm.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        opacity: .5,
+        marginTop: 1
+      }
+    }, tm.players.join(" & ")));
+  })), /*#__PURE__*/React.createElement(FieldLabel, null, "Win Type"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8,
+      marginBottom: 14
+    }
+  }, WIN_TYPES.map(wt => {
+    const active = form.winType === wt.value;
+    return /*#__PURE__*/React.createElement("button", {
+      key: wt.value,
+      className: `choice${active ? " sel-red" : ""}`,
+      onClick: () => setForm(f => ({
+        ...f,
+        winType: wt.value
+      })),
+      style: {
+        padding: "9px 10px",
+        textAlign: "left",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between"
+      }
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        marginBottom: 1
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        marginRight: 4
+      }
+    }, wt.icon), wt.label), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        opacity: .4
+      }
+    }, wt.desc)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: active ? "#ef4444" : "rgba(255,255,255,.08)",
+        borderRadius: 5,
+        padding: "1px 7px",
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 15,
+        color: active ? "#fff" : "rgba(255,255,255,.4)",
+        marginLeft: 6,
+        flexShrink: 0
+      }
+    }, wt.pts));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement(FieldLabel, {
+    style: {
+      marginBottom: 0
+    }
+  }, "\u2B50 MoM ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--c5)",
+      fontWeight: 400,
+      letterSpacing: 0,
+      fontSize: 9
+    }
+  }, "optional \xB7 ", wTeam.name))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3,1fr)",
+      gap: 6,
+      marginBottom: 14
+    }
+  }, wTeam.players.map(p => /*#__PURE__*/React.createElement("button", {
+    key: p,
+    className: `choice${form.mom === p ? " sel-gold" : ""}`,
+    onClick: () => setForm(f => ({
+      ...f,
+      mom: f.mom === p ? null : p
+    })),
+    style: {
+      padding: "9px 6px",
+      textAlign: "center",
+      fontSize: 12,
+      fontWeight: 700
+    }
+  }, p)), /*#__PURE__*/React.createElement("button", {
+    className: `choice${form.mom === null ? " sel-none" : ""}`,
+    onClick: () => setForm(f => ({
+      ...f,
+      mom: null
+    })),
+    style: {
+      padding: "9px 6px",
+      textAlign: "center",
+      fontSize: 11,
+      color: "var(--c3)"
+    }
+  }, "None")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement(FieldLabel, {
+    style: {
+      marginBottom: 0
+    }
+  }, "\uD83D\uDCA9 Kunni ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--c5)",
+      fontWeight: 400,
+      letterSpacing: 0,
+      fontSize: 9
+    }
+  }, "optional \xB7 ", lTeam.name))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3,1fr)",
+      gap: 6,
+      marginBottom: 18
+    }
+  }, lTeam.players.map(p => /*#__PURE__*/React.createElement("button", {
+    key: p,
+    className: `choice${form.kunni === p ? " sel-red" : ""}`,
+    onClick: () => setForm(f => ({
+      ...f,
+      kunni: f.kunni === p ? null : p
+    })),
+    style: {
+      padding: "9px 6px",
+      textAlign: "center",
+      fontSize: 12,
+      fontWeight: 700
+    }
+  }, p)), /*#__PURE__*/React.createElement("button", {
+    className: `choice${form.kunni === null ? " sel-none" : ""}`,
+    onClick: () => setForm(f => ({
+      ...f,
+      kunni: null
+    })),
+    style: {
+      padding: "9px 6px",
+      textAlign: "center",
+      fontSize: 11,
+      color: "var(--c3)"
+    }
+  }, "None")), /*#__PURE__*/React.createElement(FieldLabel, null, "\uD83D\uDCCD Location ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--c5)",
+      fontWeight: 400,
+      letterSpacing: 0,
+      fontSize: 9
+    }
+  }, "optional")), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: form.location,
+    onChange: e => setForm(f => ({
+      ...f,
+      location: e.target.value
+    })),
+    placeholder: "e.g. Peera Club, Peshawar",
+    maxLength: 60,
+    style: {
+      width: "100%",
+      background: "var(--stat-bg)",
+      border: "1.5px solid var(--input-b)",
+      borderRadius: 10,
+      padding: "10px 14px",
+      color: "var(--c1)",
+      fontSize: 13,
+      fontFamily: "inherit",
+      outline: "none",
+      marginBottom: 18,
+      transition: "border-color .15s"
+    },
+    onFocus: e => e.target.style.borderColor = "rgba(167,139,250,.6)",
+    onBlur: e => e.target.style.borderColor = "rgba(255,255,255,.1)"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "rec-btn",
+    onClick: tryRecord,
+    disabled: siezed && curSG.length >= gamesPerSet,
+    style: {
+      fontSize: 19,
+      letterSpacing: 4,
+      padding: "14px"
+    }
+  }, "RECORD GAME"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12,
+      padding: "10px 12px",
+      background: "var(--choice)",
+      borderRadius: 10,
+      border: "1px solid rgba(255,255,255,.05)"
+    }
+  }, WIN_TYPES.map(wt => /*#__PURE__*/React.createElement("div", {
+    key: wt.value,
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "3px 0",
+      borderBottom: "1px solid var(--sep2)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--c3)"
+    }
+  }, wt.icon, " ", wt.label), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: "#fbbf24"
+    }
+  }, "+", wt.pts, "pt", wt.pts > 1 ? "s" : "")))))), /*#__PURE__*/React.createElement("button", {
+    className: "fab-btn",
+    onClick: () => setPanelOpen(o => !o)
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "fab-label"
+  }, panelOpen ? "Close Panel" : "Record Game"), panelOpen ? "✕" : "🃏", /*#__PURE__*/React.createElement("span", {
+    className: "fab-badge"
+  }, curSG.length))), confirmGame && (() => {
+    const wt = getWT(form.winType);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "modal-bg"
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "var(--modal)",
+        border: "1px solid rgba(251,191,36,.4)",
+        borderRadius: 18,
+        padding: "28px 26px 22px",
+        maxWidth: 380,
+        width: "100%",
+        boxShadow: "0 0 60px rgba(251,191,36,.15)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: "'Bebas Neue',sans-serif",
+        fontSize: 28,
+        letterSpacing: 5,
+        color: "#fbbf24",
+        textAlign: "center",
+        marginBottom: 4
+      }
+    }, "CONFIRM?"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        color: "var(--c4)",
+        textAlign: "center",
+        marginBottom: 20
+      }
+    }, "Review before recording"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "var(--choice)",
+        borderRadius: 12,
+        padding: "14px 16px",
+        marginBottom: 20,
+        border: "1px solid rgba(255,255,255,.07)"
+      }
+    }, [["Game", `#${games.length + 1}  ·  Set ${curSet}`], ["Winner", `${form.winner === "A" ? "🔵" : "🔴"}  ${wTeam.name}  (${wTeam.players.join(" & ")})`], ["Win Type", `${wt === null || wt === void 0 ? void 0 : wt.icon}  ${wt === null || wt === void 0 ? void 0 : wt.label}  (+${wt === null || wt === void 0 ? void 0 : wt.pts}pt)`], ["⭐ MoM", form.mom || "—  (not awarded)"], ["💩 Kunni", form.kunni || "—  (not awarded)"], ["📅 Date", new Date().toLocaleDateString("en-PK", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    })], ["🕐 Time", new Date().toLocaleTimeString("en-PK", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })], ["📍 Location", form.location.trim() || "—  (not set)"]].map(_ref6 => {
+      let [lbl, val] = _ref6;
+      return /*#__PURE__*/React.createElement("div", {
+        key: lbl,
+        style: {
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "8px 0",
+          borderBottom: "1px solid rgba(255,255,255,.05)"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: 1.5,
+          color: "var(--c4)",
+          textTransform: "uppercase"
+        }
+      }, lbl), /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 14,
+          fontWeight: 700,
+          color: lbl.includes("MoM") && !form.mom || lbl.includes("Kunni") && !form.kunni || lbl.includes("Location") && !form.location.trim() ? "rgba(255,255,255,.3)" : "#fff",
+          textAlign: "right",
+          fontStyle: lbl.includes("MoM") && !form.mom || lbl.includes("Kunni") && !form.kunni || lbl.includes("Location") && !form.location.trim() ? "italic" : "normal"
+        }
+      }, val));
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 10
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "rec-btn",
+      onClick: doRecord,
+      style: {
+        fontSize: 18,
+        letterSpacing: 3,
+        padding: "13px"
+      }
+    }, "CONFIRM \u2713"), /*#__PURE__*/React.createElement("button", {
+      className: "ghost-btn",
+      onClick: () => setConfirmGame(false),
+      style: {
+        padding: "13px 20px"
+      }
+    }, "Cancel"))));
+  })(), showGuide && /*#__PURE__*/React.createElement("div", {
+    className: "modal-bg",
+    onClick: () => setShowGuide(false),
+    style: {
+      alignItems: "flex-start",
+      paddingTop: 20,
+      overflowY: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: e => e.stopPropagation(),
+    style: {
+      background: "var(--modal)",
+      border: "1px solid rgba(251,191,36,.3)",
+      borderRadius: 18,
+      maxWidth: 600,
+      width: "100%",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--panel-hdr)",
+      borderBottom: "1px solid rgba(251,191,36,.2)",
+      padding: "18px 22px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      position: "sticky",
+      top: 0,
+      zIndex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 22,
+      letterSpacing: 3,
+      color: "#fbbf24"
+    }
+  }, "\uD83D\uDCD6  DASHBOARD GUIDE"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowGuide(false),
+    style: {
+      background: "none",
+      border: "none",
+      color: "var(--c3)",
+      fontSize: 22,
+      cursor: "pointer",
+      lineHeight: 1
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "16px 20px 24px",
+      maxHeight: "80vh",
+      overflowY: "auto"
+    }
+  }, /*#__PURE__*/React.createElement(GuideTab, null)))), showSettings && /*#__PURE__*/React.createElement("div", {
+    className: "modal-bg",
+    onClick: () => setShowSettings(false)
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: e => e.stopPropagation(),
+    style: {
+      background: "var(--modal)",
+      border: "1px solid rgba(251,191,36,.35)",
+      borderRadius: 18,
+      padding: "28px 26px 24px",
+      maxWidth: 340,
+      width: "100%"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 22,
+      letterSpacing: 3,
+      color: "var(--c1)"
+    }
+  }, "\u2699\uFE0F  GAME SETTINGS"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSettings(false),
+    style: {
+      background: "none",
+      border: "none",
+      color: "var(--c3)",
+      fontSize: 20,
+      cursor: "pointer",
+      lineHeight: 1
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 22
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 9,
+      fontWeight: 800,
+      letterSpacing: 2,
+      color: "#fbbf24",
+      textTransform: "uppercase",
+      marginBottom: 12
+    }
+  }, "Games Per Set"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setGamesPerSet(n => Math.max(2, n - 1)),
+    style: {
+      width: 40,
+      height: 40,
+      borderRadius: 10,
+      background: "var(--ghost)",
+      border: "1px solid var(--ghost-b)",
+      color: "var(--c1)",
+      fontSize: 20,
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: 700,
+      transition: "all .15s"
+    },
+    disabled: gamesPerSet <= 2
+  }, "\u2212"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 42,
+      fontWeight: 900,
+      color: "#fbbf24",
+      lineHeight: 1
+    }
+  }, gamesPerSet), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "var(--c4)",
+      letterSpacing: 1,
+      marginTop: 4
+    }
+  }, "games per set")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setGamesPerSet(n => Math.min(99, n + 1)),
+    style: {
+      width: 40,
+      height: 40,
+      borderRadius: 10,
+      background: "var(--ghost)",
+      border: "1px solid var(--ghost-b)",
+      color: "var(--c1)",
+      fontSize: 20,
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: 700,
+      transition: "all .15s"
+    },
+    disabled: gamesPerSet >= 99
+  }, "+")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      marginTop: 12,
+      flexWrap: "wrap"
+    }
+  }, [6, 10, 15, 20, 25, 30].map(n => /*#__PURE__*/React.createElement("button", {
+    key: n,
+    onClick: () => setGamesPerSet(n),
+    style: {
+      flex: 1,
+      minWidth: 36,
+      padding: "6px 4px",
+      borderRadius: 8,
+      border: `1px solid ${gamesPerSet === n ? "#fbbf24" : "var(--ghost-b)"}`,
+      background: gamesPerSet === n ? "rgba(251,191,36,.2)" : "var(--choice)",
+      color: gamesPerSet === n ? "#fbbf24" : "var(--c3)",
+      fontFamily: "inherit",
+      fontSize: 12,
+      fontWeight: 700,
+      cursor: "pointer",
+      transition: "all .15s"
+    }
+  }, n))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 10,
+      display: "flex",
+      alignItems: "center",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--c4)",
+      flexShrink: 0
+    }
+  }, "Custom:"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: "2",
+    max: "99",
+    value: gamesPerSet,
+    onChange: e => {
+      const v = parseInt(e.target.value, 10);
+      if (!isNaN(v) && v >= 2 && v <= 99) setGamesPerSet(v);
+    },
+    style: {
+      flex: 1,
+      background: "var(--input)",
+      border: "1px solid var(--input-b)",
+      borderRadius: 8,
+      padding: "7px 10px",
+      color: "var(--c1)",
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 14,
+      fontWeight: 700,
+      textAlign: "center",
+      outline: "none"
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--c4)",
+      flexShrink: 0
+    }
+  }, "games")), games.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 14,
+      padding: "10px 12px",
+      background: "rgba(251,191,36,.07)",
+      border: "1px solid rgba(251,191,36,.25)",
+      borderRadius: 8,
+      fontSize: 11,
+      color: "#fbbf24",
+      lineHeight: 1.5
+    }
+  }, "\u26A0\uFE0F Tournament in progress. Changes take effect from the next set.")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "1px solid var(--sep)",
+      paddingTop: 18,
+      fontSize: 11,
+      color: "var(--c4)",
+      lineHeight: 1.7
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 10px",
+      background: "var(--choice)",
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      color: "var(--c2)",
+      marginBottom: 2
+    }
+  }, "Seize rule"), /*#__PURE__*/React.createElement("div", null, "Leader score > trailing + remaining \xD7 3")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 10px",
+      background: "var(--choice)",
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      color: "var(--c2)",
+      marginBottom: 2
+    }
+  }, "Win the Match"), /*#__PURE__*/React.createElement("div", null, "Win 2 of ", SETS, " sets \u2192 KINGS")))))), showPreResetPDF && /*#__PURE__*/React.createElement("div", {
+    className: "modal-bg"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--modal)",
+      border: "1px solid rgba(251,191,36,.4)",
+      borderRadius: 18,
+      padding: "28px 26px 24px",
+      maxWidth: 340,
+      width: "100%",
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 42,
+      marginBottom: 12
+    }
+  }, "\uD83D\uDCC4"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 22,
+      letterSpacing: 3,
+      color: "var(--c1)",
+      marginBottom: 8
+    }
+  }, "SAVE BEFORE RESET?"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "var(--c3)",
+      marginBottom: 22,
+      lineHeight: 1.6
+    }
+  }, "Download a PDF report of this tournament before it gets erased?"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "rec-btn",
+    onClick: () => {
+      printLog();
+      setTimeout(printAnalytics, 300);
+      setTimeout(doResetConfirmed, 800);
+    },
+    style: {
+      fontSize: 15,
+      letterSpacing: 3,
+      padding: "13px"
+    }
+  }, "\uD83D\uDCE5 Download Report & Reset"), /*#__PURE__*/React.createElement("button", {
+    onClick: doResetConfirmed,
+    style: {
+      background: "rgba(239,68,68,.12)",
+      border: "1px solid rgba(239,68,68,.3)",
+      color: "#f87171",
+      borderRadius: 10,
+      cursor: "pointer",
+      fontWeight: 700,
+      fontSize: 13,
+      padding: "11px",
+      fontFamily: "inherit",
+      transition: ".15s"
+    }
+  }, "Skip & Reset Anyway"), /*#__PURE__*/React.createElement("button", {
+    className: "ghost-btn",
+    onClick: () => setShowPreResetPDF(false),
+    style: {
+      padding: "10px"
+    }
+  }, "Cancel \u2014 Go Back")))), confirmReset && /*#__PURE__*/React.createElement("div", {
+    className: "modal-bg"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--modal)",
+      border: "1px solid rgba(239,68,68,.4)",
+      borderRadius: 18,
+      padding: "28px 26px 22px",
+      maxWidth: 320,
+      width: "100%",
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 40,
+      marginBottom: 12
+    }
+  }, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 24,
+      letterSpacing: 3,
+      color: "var(--c1)",
+      marginBottom: 8
+    }
+  }, "RESET TOURNAMENT?"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "var(--c3)",
+      marginBottom: 22,
+      lineHeight: 1.6
+    }
+  }, "All game records will be permanently erased."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "rec-btn",
+    onClick: doReset,
+    style: {
+      background: "linear-gradient(135deg,#7f1d1d,#ef4444)",
+      boxShadow: "0 4px 20px rgba(239,68,68,.3)",
+      fontSize: 16,
+      letterSpacing: 2,
+      padding: "12px 24px",
+      color: "var(--c1)"
+    }
+  }, "Yes, Reset"), /*#__PURE__*/React.createElement("button", {
+    className: "ghost-btn",
+    onClick: () => setConfirmReset(false),
+    style: {
+      padding: "12px 22px"
+    }
+  }, "Cancel")))));
 }
 
 /* ─── SUB COMPONENTS ───────────────────────────────────── */
-function ScorePanel({team,score,sets,isKing,isGhulam}){
-  return (
-    <div style={{padding:"22px 16px",textAlign:"center",position:"relative"}}>
-      {isKing&&<span style={{position:"absolute",top:10,right:12,fontSize:36}}>👑</span>}
-      {isGhulam&&<span style={{position:"absolute",top:10,right:12,fontSize:36}}>⚰️</span>}
-      <div style={{fontSize:9,fontWeight:800,letterSpacing:5,color:team.light,textTransform:"uppercase",marginBottom:5,opacity:.8}}>{team.name}</div>
-      <div style={{fontSize:14,fontWeight:700,color:"rgba(255,255,255,.75)",marginBottom:14}}>{team.players.join(" & ")}</div>
-      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:76,lineHeight:1,color:team.color,letterSpacing:2,textShadow:`0 0 40px ${team.glow}`}}>{score}</div>
-      <div style={{fontSize:10,color:"rgba(255,255,255,.25)",fontWeight:600,marginTop:6,marginBottom:14,letterSpacing:1,textTransform:"uppercase"}}>pts this set</div>
-      <div style={{display:"flex",justifyContent:"center",gap:6}}>
-        {sets.map(s=>(
-          <div key={s.n} style={{width:26,height:26,borderRadius:7,display:"flex",alignItems:"center",justifyContent:"center",background:s.winner===team.id?team.color:"rgba(255,255,255,.06)",border:`1px solid ${s.winner===team.id?team.color:"rgba(255,255,255,.1)"}`,fontSize:10,fontWeight:800,color:s.winner===team.id?"#fff":"rgba(255,255,255,.3)"}}>
-            {s.winner===team.id?"W":s.winner&&s.winner!==team.id?"L":s.n}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+function ScorePanel(_ref7) {
+  let {
+    team,
+    score,
+    sets,
+    isKing,
+    isGhulam,
+    isWinner,
+    isLoser
+  } = _ref7;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "24px 16px",
+      textAlign: "center",
+      position: "relative"
+    }
+  }, isKing && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      top: 8,
+      right: 10,
+      fontSize: 30,
+      filter: "drop-shadow(0 0 8px rgba(251,191,36,.9))",
+      lineHeight: 1
+    }
+  }, "\uD83D\uDC51"), isGhulam && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      top: 8,
+      right: 10,
+      fontSize: 30,
+      filter: "drop-shadow(0 0 8px rgba(239,68,68,.7))",
+      lineHeight: 1
+    }
+  }, "\uD83E\uDDDF"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 8,
+      fontWeight: 800,
+      letterSpacing: 5,
+      color: team.light,
+      textTransform: "uppercase",
+      marginBottom: 4,
+      opacity: .8
+    }
+  }, team.name), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Rajdhani',sans-serif",
+      fontSize: 16,
+      fontWeight: 700,
+      color: "var(--c2)",
+      marginBottom: 12,
+      letterSpacing: 1
+    }
+  }, team.players.join(" & ")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 82,
+      lineHeight: 1,
+      color: team.color,
+      letterSpacing: 2,
+      textShadow: `0 0 60px ${team.glow},0 0 20px ${team.glow}`
+    }
+  }, score), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 8,
+      color: "rgba(255,255,255,.6)",
+      fontWeight: 700,
+      marginTop: 4,
+      marginBottom: 14,
+      letterSpacing: 3,
+      textTransform: "uppercase"
+    }
+  }, "PTS THIS SET"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 6
+    }
+  }, sets.map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.n,
+    style: {
+      width: 28,
+      height: 28,
+      borderRadius: 8,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: s.winner === team.id ? team.color : s.winner && s.winner !== team.id ? "rgba(239,68,68,.1)" : "var(--stat-bg)",
+      border: `1.5px solid ${s.winner === team.id ? team.color : s.winner && s.winner !== team.id ? "rgba(239,68,68,.3)" : "var(--sep)"}`,
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 9,
+      fontWeight: 800,
+      color: s.winner === team.id ? "#fff" : s.winner && s.winner !== team.id ? "#f87171" : "var(--c4)"
+    }
+  }, s.winner === team.id ? "W" : s.winner && s.winner !== team.id ? "L" : s.n))));
 }
-
-function FieldLabel({children}){
-  return <div style={{fontSize:9,fontWeight:800,letterSpacing:3,color:"rgba(255,255,255,.3)",textTransform:"uppercase",marginBottom:8}}>{children}</div>;
+function FieldLabel(_ref8) {
+  let {
+    children
+  } = _ref8;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9,
+      fontWeight: 800,
+      letterSpacing: 3,
+      color: "var(--c4)",
+      textTransform: "uppercase",
+      marginBottom: 8
+    }
+  }, children);
 }
-
-function ACard({title,accent,children}){
-  return (
-    <div className="card" style={{padding:16,marginBottom:10}}>
-      <div style={{fontSize:11,fontWeight:800,letterSpacing:2,color:accent,textTransform:"uppercase",marginBottom:14}}>{title}</div>
-      {children}
-    </div>
-  );
+function ACard(_ref9) {
+  let {
+    title,
+    accent,
+    children
+  } = _ref9;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      padding: 16,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      letterSpacing: 2,
+      color: accent,
+      textTransform: "uppercase",
+      marginBottom: 14
+    }
+  }, title), children);
 }
-
-function StatBar({name,count,max,color,rank}){
-  const pct=max?(count/max)*100:0;
-  return (
-    <div style={{marginBottom:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5}}>
-        <span style={{fontSize:13,fontWeight:700,color:"#fff"}}>{rank===1?"🥇":rank===2?"🥈":"🥉"} {name}</span>
-        <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:19,letterSpacing:1,color}}>{count}×</span>
-      </div>
-      <div style={{height:4,background:"rgba(255,255,255,.07)",borderRadius:2,overflow:"hidden"}}>
-        <div style={{width:`${pct}%`,height:"100%",background:color,opacity:.85,borderRadius:2,transition:"width .5s"}}/>
-      </div>
-    </div>
-  );
+function StatBar(_ref0) {
+  let {
+    name,
+    count,
+    max,
+    color,
+    rank
+  } = _ref0;
+  const pct = max ? count / max * 100 : 0;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 5
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: "var(--c1)"
+    }
+  }, rank === 1 ? "🥇" : rank === 2 ? "🥈" : "🥉", " ", name), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: "'Bebas Neue',sans-serif",
+      fontSize: 19,
+      letterSpacing: 1,
+      color
+    }
+  }, count, "\xD7")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 4,
+      background: "var(--bar)",
+      borderRadius: 2,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: `${pct}%`,
+      height: "100%",
+      background: color,
+      opacity: .85,
+      borderRadius: 2,
+      transition: "width .5s"
+    }
+  })));
 }
-
-function NoData({msg}){
-  return <div style={{color:"rgba(255,255,255,.25)",fontSize:12,fontStyle:"italic",padding:"4px 0"}}>{msg}</div>;
+function NoData(_ref1) {
+  let {
+    msg
+  } = _ref1;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: "var(--c5)",
+      fontSize: 12,
+      fontStyle: "italic",
+      padding: "4px 0"
+    }
+  }, msg);
 }
+function GuideTab() {
+  const sections = [{
+    icon: "🃏",
+    title: "What is Maidaan-e-Rung?",
+    body: `Maidaan-e-Rung (میدانِ رنگ — "Field of Colour") is Peera Club's official digital scoreboard for quarterly Rung (رنگ) card game tournaments. It tracks scores, awards, and rankings across a 3-set match between two teams of 2 players each.`
+  }, {
+    icon: "👥",
+    title: "The Teams",
+    body: `Two teams compete: Team A (Farhan & Umair 🔵) and Team B (Zeeshan & Haider 🔴). Each team plays as partners, just like in real Rung. The team that wins 2 out of 3 sets wins the overall match and earns the title of KINGS 👑. Losers become GHULAMS 🧟.`
+  }, {
+    icon: "🏟️",
+    title: "Match Structure",
+    body: `A match consists of 3 Sets. Each set has a configurable number of games (default: 20). The team with the most points at the end of a set wins that set. Win 2 sets → win the match. You can change the number of games per set any time using the ⚙️ Settings button.`
+  }, {
+    icon: "🎯",
+    title: "Scoring — Win Types",
+    items: [{
+      icon: "✨",
+      name: "Simple Win",
+      pts: "1 pt",
+      desc: "One team wins the majority of the round normally."
+    }, {
+      icon: "💪",
+      name: "Court",
+      pts: "2 pts",
+      desc: "Winning team takes all the tricks (court) — a dominant win."
+    }, {
+      icon: "🔥",
+      name: "Gooun Court",
+      pts: "3 pts",
+      desc: "Winning team beats the opponent's court — the highest skill win."
+    }, {
+      icon: "💀",
+      name: "Gandageeri",
+      pts: "3 pts",
+      desc: "A foul or unsportsmanlike move — awarded to punish the offending team."
+    }]
+  }, {
+    icon: "⚡",
+    title: "Set Seizure Rule",
+    body: `If the leading team's score is so far ahead that the trailing team mathematically cannot catch up — even if they win every remaining game at max points (3 pts each) — the set is automatically SEIZED. The leading team is declared winner of that set immediately, without waiting for all games to finish. Formula: Leader > Trailing + (Remaining Games × 3).`
+  }, {
+    icon: "⭐",
+    title: "Man of the Match (MoM)",
+    body: `After each game, you can optionally award a Man of the Match to the best player from the winning team. MoM is optional — tap "None" to skip. MoM tally is tracked per player across the tournament and feeds into the Rankings system.`
+  }, {
+    icon: "💩",
+    title: "Kunni Award",
+    body: `Kunni is awarded to the most embarrassing player on the losing side — the one who played worst or gave away points. Like MoM, it's optional. Kunni tally is tracked and used to determine the tournament Chootya. Wear it with shame.`
+  }, {
+    icon: "🏅",
+    title: "Player Rankings",
+    body: `After each completed or seized set, players are ranked into 4 tiers based on their performance that set and cumulatively across the tournament. Head to the 🏅 Rankings tab to see all rankings.`,
+    items: [{
+      icon: "🏆",
+      name: "Grand Master",
+      desc: "Most MoM awards — the MVP"
+    }, {
+      icon: "🥈",
+      name: "Expert",
+      desc: "2nd most MoM awards"
+    }, {
+      icon: "🎯",
+      name: "Amateur",
+      desc: "Fair performance — neither top nor bottom"
+    }, {
+      icon: "💩",
+      name: "Chootya",
+      desc: "Most Kunni points — the tournament liability"
+    }]
+  }, {
+    icon: "🃏",
+    title: "Recording a Game",
+    body: `Tap the gold 🃏 floating button (bottom-right) to open the Record Game panel. Select the winning team, win type, optional MoM, optional Kunni, and optional location. Tap RECORD GAME — a confirmation shows before saving. You can Undo the last game from the panel header anytime.`
+  }, {
+    icon: "📊",
+    title: "Analytics & Reports",
+    body: `The 📊 Analytics tab shows MoM leaderboards, Kunni Hall of Shame, per-player win/MoM/Kunni stats, and win type breakdown. The 📜 Game Log shows a full chronological record of every game with timestamps and location. Both tabs have a 🖨 Print / Save PDF button to export a clean report.`
+  }, {
+    icon: "💾",
+    title: "Data & Storage",
+    body: `All tournament data is saved automatically in your browser's local storage. It persists across page refreshes and sessions.. Resetting the tournament will offer to download a PDF backup first — no data is lost without your confirmation.`
+  }, {
+    icon: "🌙",
+    title: "Dark / Light Mode",
+    body: `Use the 🌙 Dark / ☀️ Light toggle in the top-right corner of the header to switch themes. Your preference is remembered automatically across sessions.`
+  }];
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16,
+      padding: "16px 18px",
+      background: "linear-gradient(135deg,rgba(251,191,36,.1),rgba(251,191,36,.03))",
+      border: "1px solid rgba(251,191,36,.3)",
+      borderRadius: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Orbitron',sans-serif",
+      fontSize: 9,
+      letterSpacing: 3,
+      color: "#fbbf24",
+      fontWeight: 800,
+      marginBottom: 6,
+      textTransform: "uppercase"
+    }
+  }, "Maidaan-e-Rung Dashboard"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      color: "var(--c2)",
+      lineHeight: 1.7
+    }
+  }, "Complete guide to using the Peera Club tournament scorekeeper. Everything you need to know \u2014 scoring, rules, features, and how-to.")), sections.map((s, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "card",
+    style: {
+      padding: "18px 20px",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: s.body || s.items ? 10 : 0
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 22,
+      flexShrink: 0
+    }
+  }, s.icon), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Rajdhani',sans-serif",
+      fontSize: 17,
+      fontWeight: 700,
+      color: "var(--c1)",
+      letterSpacing: .5
+    }
+  }, s.title)), s.body && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "var(--c3)",
+      lineHeight: 1.75,
+      paddingLeft: 32
+    }
+  }, s.body), s.items && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 8,
+      paddingLeft: 32,
+      marginTop: s.body ? 10 : 0
+    }
+  }, s.items.map((item, j) => /*#__PURE__*/React.createElement("div", {
+    key: j,
+    style: {
+      display: "flex",
+      alignItems: "flex-start",
+      gap: 10,
+      padding: "9px 12px",
+      background: "var(--choice)",
+      borderRadius: 9,
+      border: "1px solid var(--sep)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 18,
+      flexShrink: 0,
+      marginTop: 1
+    }
+  }, item.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: "var(--c1)"
+    }
+  }, item.name), item.pts && /*#__PURE__*/React.createElement("span", {
+    style: {
+      marginLeft: 8,
+      fontSize: 11,
+      fontWeight: 800,
+      color: "#fbbf24",
+      background: "rgba(251,191,36,.12)",
+      padding: "1px 7px",
+      borderRadius: 5
+    }
+  }, item.pts), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: "var(--c4)",
+      marginTop: 2,
+      lineHeight: 1.5
+    }
+  }, item.desc))))))));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
