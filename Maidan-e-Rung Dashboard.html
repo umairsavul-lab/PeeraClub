@@ -194,15 +194,43 @@
 
     /* ── SLIDE-IN DRAWER ── */
     @keyframes slideInLeft{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
-    @keyframes confettiFall{
-      0%{transform:rotate(var(--r,0deg)) translateY(0) scale(1);opacity:1}
-      80%{opacity:1}
-      100%{transform:rotate(calc(var(--r,0deg) + 720deg)) translateY(110vh) scale(.8);opacity:0}
-    }
-    @keyframes popIn{from{transform:translate(-50%,-50%) scale(.5);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
-    /* ── SIDEBAR NAV hover glow ── */
-    .sidenav-btn:hover span:first-child{filter:drop-shadow(0 0 6px rgba(251,191,36,.6))}
+    /* ── CONFETTI ── each piece uses CSS vars set inline: --x,--y,--spin,--wobble */
+    @keyframes cfall{
+      0%  { transform: translate(var(--x), var(--y)) rotate(0deg) scaleX(1);   opacity:1; }
+      50% { transform: translate(calc(var(--x) + var(--wobble,0px)), calc(var(--y) + 50vh)) rotate(calc(var(--spin,360deg) * 0.5)) scaleX(0.6); opacity:1; }
+      100%{ transform: translate(calc(var(--x) + var(--wobble,0px)*2), 110vh) rotate(var(--spin,360deg)) scaleX(1); opacity:0; }
+    }
+    .confetti-piece{
+      position:absolute;
+      top:0;
+      animation: cfall var(--dur,2s) var(--delay,0s) ease-in forwards;
+      border-radius:2px;
+      will-change:transform,opacity;
+    }
+
+    /* ── CELEBRATION POPUP ── */
+    @keyframes popIn{
+      0%  {transform:translate(-50%,-50%) scale(0.3) rotate(-8deg); opacity:0;}
+      60% {transform:translate(-50%,-50%) scale(1.08) rotate(2deg);  opacity:1;}
+      80% {transform:translate(-50%,-50%) scale(0.97) rotate(-1deg); opacity:1;}
+      100%{transform:translate(-50%,-50%) scale(1)    rotate(0deg);  opacity:1;}
+    }
+    @keyframes popOut{
+      0%  {transform:translate(-50%,-50%) scale(1);   opacity:1;}
+      100%{transform:translate(-50%,-50%) scale(0.8); opacity:0;}
+    }
+    .celebration-popup{
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      border-radius:24px;
+      padding:40px 52px;
+    }
+
+    /* ── SIDEBAR NAV ── */
+    .sidenav-btn:hover{background:rgba(251,191,36,.08)!important}
 
     @media(max-width:650px){
       .float-panel{width:calc(100vw - 32px);right:0}
@@ -462,6 +490,43 @@ function App() {
   const bWins = sets.filter(s => s.winner === "B").length;
   const isDone = aWins >= 2 || bWins >= 2 || sets.every(s => s.done || s.seized);
   const kings = isDone ? aWins > bWins ? "A" : bWins > aWins ? "B" : null : null;
+
+  // Detect when a set becomes won and fire celebration — must be after `sets` is defined
+  const prevSetWinners = useRef({});
+  useEffect(() => {
+    sets.forEach(s => {
+      const isWon = (s.seized || s.done) && s.winner && s.winner !== 'draw';
+      const key = `set-${s.n}`;
+      if (isWon && !prevSetWinners.current[key]) {
+        prevSetWinners.current[key] = true;
+        const winTeam = teamOf(s.winner);
+        setSetWinMsg({
+          teamName: winTeam.name,
+          color: winTeam.color,
+          glow: winTeam.glow,
+          players: winTeam.players
+        });
+        setConfetti(Array.from({
+          length: 70
+        }, (_, i) => ({
+          id: i,
+          x: 5 + Math.random() * 90,
+          y: -10 - Math.random() * 100,
+          delay: Math.random() * 1.2,
+          dur: 2 + Math.random() * 2,
+          color: ["#fbbf24", "#f59e0b", "#3b82f6", "#60a5fa", "#ef4444", "#f87171", "#22c55e", "#a78bfa", "#f472b6", "#fff"][Math.floor(Math.random() * 10)],
+          w: 6 + Math.random() * 8,
+          h: 4 + Math.random() * 6,
+          spin: Math.random() * 720 - 360,
+          wobble: Math.random() * 30 - 15
+        })));
+        setTimeout(() => {
+          setSetWinMsg(null);
+          setConfetti([]);
+        }, 4000);
+      }
+    });
+  }, [sets]);
   const curInfo = sets[curSet - 1];
   const siezed = curInfo === null || curInfo === void 0 ? void 0 : curInfo.seized;
   const sWinner = curInfo === null || curInfo === void 0 ? void 0 : curInfo.winner;
@@ -510,35 +575,7 @@ function App() {
     const updated = [...games, g];
     setGames(updated);
     await saveGames(updated);
-    const ns = buildSets(updated, gamesPerSet)[curSet - 1];
-    if (ns.seized && ns.winner) {
-      const winTeam = teamOf(ns.winner);
-      setSetWinMsg({
-        teamName: winTeam.name,
-        color: winTeam.color,
-        glow: winTeam.glow,
-        players: winTeam.players
-      });
-      // Generate confetti particles
-      const particles = Array.from({
-        length: 60
-      }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        delay: Math.random() * 0.8,
-        dur: 1.5 + Math.random() * 1.5,
-        color: ["#fbbf24", "#3b82f6", "#ef4444", "#22c55e", "#a78bfa", "#f472b6", "#fff"][Math.floor(Math.random() * 7)],
-        size: 6 + Math.random() * 8,
-        rotate: Math.random() * 360
-      }));
-      setConfetti(particles);
-      setTimeout(() => {
-        setSetWinMsg(null);
-        setConfetti([]);
-      }, 3500);
-    } else {
-      flash(`✔  Game #${g.gameNumber} saved!`, "ok");
-    }
+    flash(`✔  Game #${g.gameNumber} saved!`, "ok");
   }
   async function undoLast() {
     if (!games.length) return;
@@ -2035,85 +2072,120 @@ function App() {
     className: "rank-name"
   }, sr.chootya), /*#__PURE__*/React.createElement("div", {
     className: "rank-stat"
-  }, sr.kunniStats[sr.chootya] || 0, " kunni")))))))))), setWinMsg && /*#__PURE__*/React.createElement("div", {
+  }, sr.kunniStats[sr.chootya] || 0, " kunni")))))))))), (setWinMsg || confetti.length > 0) && /*#__PURE__*/React.createElement("div", {
     style: {
       position: "fixed",
       inset: 0,
-      zIndex: 9999,
-      pointerEvents: "none",
-      overflow: "hidden"
+      zIndex: 99999,
+      pointerEvents: "none"
     }
   }, confetti.map(p => /*#__PURE__*/React.createElement("div", {
     key: p.id,
+    className: "confetti-piece",
     style: {
-      position: "absolute",
       left: `${p.x}%`,
-      top: "-20px",
-      width: p.size,
-      height: p.size * 0.6,
+      width: p.w,
+      height: p.h,
       background: p.color,
-      borderRadius: 2,
-      animation: `confettiFall ${p.dur}s ${p.delay}s ease-in forwards`,
-      transform: `rotate(${p.rotate}deg)`
+      '--x': `${p.wobble}px`,
+      '--y': `${p.y}px`,
+      '--spin': `${p.spin}deg`,
+      '--wobble': `${p.wobble}px`,
+      '--dur': `${p.dur}s`,
+      '--delay': `${p.delay}s`
     }
-  })), /*#__PURE__*/React.createElement("div", {
+  })), setWinMsg && /*#__PURE__*/React.createElement("div", {
     style: {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%,-50%)",
-      background: `linear-gradient(135deg,rgba(0,0,0,.95),rgba(20,20,20,.98))`,
-      border: `2px solid ${setWinMsg.color}`,
-      borderRadius: 24,
-      padding: "40px 52px",
-      textAlign: "center",
-      boxShadow: `0 0 80px ${setWinMsg.glow},0 20px 60px rgba(0,0,0,.8)`,
-      animation: "popIn .35s cubic-bezier(.34,1.56,.64,1)",
       pointerEvents: "auto"
+    },
+    onClick: () => {
+      setSetWinMsg(null);
+      setConfetti([]);
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 56,
-      marginBottom: 12,
-      lineHeight: 1
+      position: "absolute",
+      inset: 0,
+      background: "rgba(0,0,0,.55)"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "celebration-popup",
+    style: {
+      background: `linear-gradient(135deg,rgba(5,5,20,.97) 0%,rgba(15,15,15,.99) 100%)`,
+      border: `2.5px solid ${setWinMsg.color}`,
+      boxShadow: `0 0 100px ${setWinMsg.glow},0 0 40px ${setWinMsg.glow},0 30px 80px rgba(0,0,0,.9)`,
+      animation: "popIn .5s cubic-bezier(.34,1.56,.64,1) forwards",
+      minWidth: 280
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      inset: -1,
+      borderRadius: 25,
+      background: `radial-gradient(ellipse at 50% 0%,${setWinMsg.color}22,transparent 60%)`,
+      pointerEvents: "none"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 64,
+      lineHeight: 1,
+      marginBottom: 10
     }
   }, "\uD83C\uDFC6"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: "'Orbitron',sans-serif",
-      fontSize: 10,
+      fontSize: 9,
       fontWeight: 800,
-      letterSpacing: 4,
+      letterSpacing: 5,
       color: setWinMsg.color,
-      marginBottom: 6,
-      textTransform: "uppercase"
+      marginBottom: 8,
+      textTransform: "uppercase",
+      opacity: .9
     }
-  }, "Set Seized!"), /*#__PURE__*/React.createElement("div", {
+  }, "SET SEIZED"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: "'Bebas Neue',sans-serif",
-      fontSize: "clamp(36px,6vw,56px)",
-      letterSpacing: 6,
+      fontSize: "clamp(40px,6vw,62px)",
+      letterSpacing: 8,
       color: "#fff",
-      lineHeight: 1,
-      textShadow: `0 0 40px ${setWinMsg.glow}`
+      lineHeight: .95,
+      textShadow: `0 0 50px ${setWinMsg.glow},0 0 20px ${setWinMsg.glow}`
     }
   }, setWinMsg.teamName), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: "'Rajdhani',sans-serif",
-      fontSize: 16,
-      color: "rgba(255,255,255,.6)",
-      marginTop: 6,
-      fontWeight: 600
+      fontSize: 17,
+      color: "rgba(255,255,255,.55)",
+      marginTop: 8,
+      fontWeight: 600,
+      letterSpacing: 1
     }
   }, setWinMsg.players.join(" & ")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 60,
+      height: 2,
+      background: setWinMsg.color,
+      margin: "14px auto 12px",
+      borderRadius: 2,
+      opacity: .6
+    }
+  }), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: "'Orbitron',sans-serif",
       fontSize: 11,
       color: setWinMsg.color,
-      marginTop: 14,
-      fontWeight: 700,
-      letterSpacing: 2
+      fontWeight: 800,
+      letterSpacing: 3,
+      textTransform: "uppercase"
     }
-  }, "WINS THE SET"))), /*#__PURE__*/React.createElement("div", {
+  }, "WINS THE SET"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 16,
+      fontSize: 11,
+      color: "rgba(255,255,255,.25)",
+      letterSpacing: 1
+    }
+  }, "tap to dismiss")))), /*#__PURE__*/React.createElement("div", {
     className: "fab-wrap",
     ref: panelRef
   }, /*#__PURE__*/React.createElement("div", {
@@ -3233,7 +3305,7 @@ function GuideTab() {
   }, {
     icon: "💾",
     title: "Data & Storage",
-    body: `All tournament data is saved automatically in your browser's local storage. It persists across page refreshes and sessions.. Resetting the tournament will offer to download a PDF backup first — no data is lost without your confirmation.`
+    body: `All tournament data is saved automatically in your browser's local storage. It persists across page refreshes and sessions. If you use this inside a Claude Project, storage may be shared. Resetting the tournament will offer to download a PDF backup first — no data is lost without your confirmation.`
   }, {
     icon: "🌙",
     title: "Dark / Light Mode",
